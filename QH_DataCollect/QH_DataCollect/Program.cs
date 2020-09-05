@@ -17,6 +17,7 @@ namespace CaterUI
 {
     static class Program
     {
+
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -33,18 +34,27 @@ namespace CaterUI
                 Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
                 Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
                 AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-                //ConfigLoad();
+                Loading();
                 Application.Run(new FormMain());
             }
             else
             {
                 HandleRunningInstance(process);
                 MessageBox.Show("该应用程序已经被打开！");
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(100);
                 System.Environment.Exit(1);
                 return;
             }
         }
+
+        #region 加载
+        private static void Loading()
+        {
+            FormLoad formLoad = new FormLoad();
+            formLoad.ShowDialog();
+        }
+        #endregion
+
 
         #region 点击一个已经打开的程序时 激活窗口
 
