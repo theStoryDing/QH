@@ -55,19 +55,21 @@ namespace CaterUI
         {
             //更新界面
             UpdateLayOut();
-            UpdateShowMessage("测试");
-            UpdateShowMessage("sdfsdfsfs");
-            UpdateShowMessage("声明懂西少时诵诗书反反复复付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付所所所所所所所所所所所所所所所所所所所所所所所所");
-            UpdateShowMessage("sdfsdfsfs");
-            UpdateShowMessage("sdfsdfsfs");
-            UpdateShowMessage("sdfsdfsfs");
-            UpdateShowMessage("sdfsdfsfs");
-            UpdateShowMessage("sdfsdfsfs");
-            UpdateShowMessage("sdfsdfsfs");
-            BatteryStatusInfo info = new BatteryStatusInfo();
-            info.Index = 12;
-            info.Code = "djdjdjjdjdjdjddkdkkdkdkdk";
-            info.IsOK = true;
+            for(int i = 0; i <=50; i++)
+            {
+                UpdateShowMessage("测试");
+                UpdateShowMessage("sdfsdfsfs");
+                UpdateShowMessage("声明懂西少时诵诗书反反复复付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付所所所所所所所所所所所所所所所所所所所所所所所所");
+                UpdateShowMessage("sdfsdfsfs");
+            }
+            
+            
+            BatteryStatusInfo info = new BatteryStatusInfo
+            {
+                Index = 12,
+                Code = "djdjdjjdjdjdjddkdkkdkdkdk",
+                IsOK = true
+            };
             UpdateTextAndBarStatus(info);
         }
 
@@ -142,11 +144,11 @@ namespace CaterUI
             DGV.SelectionMode = DataGridViewSelectionMode.CellSelect;//单击单元格选中单个  
             DGV.MultiSelect = false;//不能多选 
             DGV.AllowUserToResizeRows = false;
-            //for (int i = 0; i < DGV.Columns.Count; i++)
-            //{
-            //    DGV.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
-            //    DGV.Columns[i].ReadOnly = false;
-            //}
+            for (int i = 0; i < DGV.Columns.Count; i++)
+            {
+                DGV.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+                DGV.Columns[i].ReadOnly = false;
+            }
         }
 
 
@@ -229,7 +231,9 @@ namespace CaterUI
                 dgvMessage.Rows[index].Cells[1].Value = strData;
                 if (dgvMessage.Rows.Count > 200)
                     dgvMessage.Rows.RemoveAt(0);
-                dgvMessage.FirstDisplayedScrollingRowIndex = dgvMessage.RowCount - 1;
+                //滚动到最新行 以下两种方式
+                //dgvMessage.FirstDisplayedScrollingRowIndex = dgvMessage.RowCount - 1;
+                dgvMessage.CurrentCell = dgvMessage.Rows[dgvMessage.RowCount - 1].Cells[0];
             };
             this.Invoke(act, strData);
         }
@@ -257,6 +261,7 @@ namespace CaterUI
         private void 清屏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dgvMessage.Rows.Clear();
+            //UpdateShowMessage("增加");
         }
     }
 }
