@@ -1,4 +1,5 @@
-﻿using CaterModel;
+﻿using CaterCommon;
+using CaterModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +14,6 @@ namespace CaterUI
 {
     public partial class FormShow : Form
     {
-
         #region UI控件
         /// <summary>
         /// PLC指示灯
@@ -42,7 +42,6 @@ namespace CaterUI
         public TableLayoutPanel TablePanel = null;       
         #endregion
 
-
         public FormShow()
         {
             InitializeComponent();
@@ -51,10 +50,7 @@ namespace CaterUI
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
         }
-
-        
-        
-
+              
         private void FormShow_Load(object sender, EventArgs e)
         {
             //更新界面
@@ -261,7 +257,6 @@ namespace CaterUI
         private void 清屏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dgvMessage.Rows.Clear();
-
         }
     }
 }
