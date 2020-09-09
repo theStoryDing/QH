@@ -12,7 +12,7 @@ using System.Windows.Forms;
 namespace CaterUI
 {
     /// <summary>
-    /// 加载界面，只作显示作用
+    /// 进度条，只作显示作用
     /// </summary>
     public partial class FormProgress : Form
     {

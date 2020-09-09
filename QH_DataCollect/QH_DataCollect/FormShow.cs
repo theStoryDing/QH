@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,6 +72,7 @@ namespace CaterUI
                 IsOK = true
             };
             UpdateTextAndBarStatus(info);
+
         }
 
         #region 更新界面布局
@@ -261,7 +263,13 @@ namespace CaterUI
         private void 清屏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dgvMessage.Rows.Clear();
-            //UpdateShowMessage("增加");
+            DirectoryInfo str = new DirectoryInfo(string.Format(@"{0}..\..\..\config\Common.xml", Application.StartupPath));
+            string path = str.FullName;
+            string x = XMLHelper.ReadNode(path, "title");
+            UpdateShowMessage(x);
+            XMLHelper.WriteNode(path, "title", "QH数据采集程序");
+            x = XMLHelper.ReadNode(path, "title");
+            UpdateShowMessage(x);
         }
     }
 }

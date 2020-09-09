@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--通用配置文件
+用于修改程序的标题、工作流程数量以及选择使用PLC
+-->
+<Config>
+  <!--标题-->
+  <title>QH数据采集程序</title>
+  <!--工作流程数-->
+  <WorkFlowNums>1</WorkFlowNums>
+  <!--选择使用PLC，欧姆龙PLC:Omron, 西门子PLC:Siemens-->
+  <FormMode>Siemens</FormMode>
+</Config>

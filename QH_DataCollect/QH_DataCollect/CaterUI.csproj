@@ -134,6 +134,7 @@
     <None Include="images\png\runLoading.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config\Common.xml" />
     <Content Include="images\ico\1.ico" />
     <Content Include="images\ico\10.ico" />
     <Content Include="images\ico\11.ico" />
@@ -191,5 +192,6 @@
     <Content Include="images\png\8.png" />
     <Content Include="images\png\9.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
