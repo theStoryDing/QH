@@ -201,6 +201,9 @@ namespace CaterUI
                     TextAlign = HorizontalAlignment.Center,
                     ReadOnly = true,
                     Dock = DockStyle.Fill,
+                    Tag = i,
+                    BackColor = Color.FromArgb(250, 249, 222),
+
                 });
 
                 LampList.Add(new MyProgressBar()
@@ -216,9 +219,28 @@ namespace CaterUI
                 TablePanel.Controls.Add(TextBoxesNumList[i], 0, i);
                 TablePanel.Controls.Add(TextBoxesCodeList[i], 1, i);
                 TablePanel.Controls.Add(LampList[i], 2, i);
-                
+                //鼠标移动到控件上方变色
+                TextBoxesCodeList[i].MouseMove += ChangeTextColor;
+                TextBoxesCodeList[i].MouseLeave += RecoverTextColor;
+
             }
         }
+
+        #region 鼠标移动到控件上方变色
+        private void RecoverTextColor(object sender, EventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            textBox.BackColor = Color.FromArgb(250, 249, 222);
+        }
+
+        private void ChangeTextColor(object sender, MouseEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            textBox.BackColor = Color.Orange;
+        }
+        #endregion
+
+
         #endregion
 
         #endregion
@@ -271,5 +293,6 @@ namespace CaterUI
             x = XMLHelper.ReadNode(path, "title");
             UpdateShowMessage(x);
         }
+
     }
 }

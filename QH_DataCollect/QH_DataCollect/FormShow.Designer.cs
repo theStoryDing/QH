@@ -28,27 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormShow));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.progressBarPulse = new System.Windows.Forms.ProgressBar();
+            this.label3 = new System.Windows.Forms.Label();
+            this.progressBarSQL = new System.Windows.Forms.ProgressBar();
+            this.label2 = new System.Windows.Forms.Label();
+            this.progressBarPLC = new System.Windows.Forms.ProgressBar();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dgvMessage = new System.Windows.Forms.DataGridView();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnMsg = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.IP设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.开始监听ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.测试读写ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清屏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
-            this.progressBarPLC = new System.Windows.Forms.ProgressBar();
-            this.progressBarSQL = new System.Windows.Forms.ProgressBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.progressBarPulse = new System.Windows.Forms.ProgressBar();
-            this.label3 = new System.Windows.Forms.Label();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnMsg = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -72,6 +72,63 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(783, 516);
             this.panel1.TabIndex = 0;
+            // 
+            // progressBarPulse
+            // 
+            this.progressBarPulse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.progressBarPulse.Location = new System.Drawing.Point(307, 496);
+            this.progressBarPulse.Name = "progressBarPulse";
+            this.progressBarPulse.Size = new System.Drawing.Size(29, 15);
+            this.progressBarPulse.TabIndex = 10;
+            this.progressBarPulse.Value = 100;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(226, 496);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(75, 15);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "握手信号:";
+            // 
+            // progressBarSQL
+            // 
+            this.progressBarSQL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.progressBarSQL.Location = new System.Drawing.Point(162, 496);
+            this.progressBarSQL.Name = "progressBarSQL";
+            this.progressBarSQL.Size = new System.Drawing.Size(29, 15);
+            this.progressBarSQL.TabIndex = 8;
+            this.progressBarSQL.Value = 100;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(119, 496);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(39, 15);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "SQL:";
+            // 
+            // progressBarPLC
+            // 
+            this.progressBarPLC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.progressBarPLC.Location = new System.Drawing.Point(57, 496);
+            this.progressBarPLC.Name = "progressBarPLC";
+            this.progressBarPLC.Size = new System.Drawing.Size(29, 15);
+            this.progressBarPLC.TabIndex = 6;
+            this.progressBarPLC.Value = 100;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 496);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 15);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "PLC:";
             // 
             // tabControl1
             // 
@@ -125,6 +182,25 @@
             this.dgvMessage.RowTemplate.Height = 27;
             this.dgvMessage.Size = new System.Drawing.Size(766, 423);
             this.dgvMessage.TabIndex = 0;
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ColumnTime.Frozen = true;
+            this.ColumnTime.HeaderText = "时间";
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.Width = 150;
+            // 
+            // ColumnMsg
+            // 
+            this.ColumnMsg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnMsg.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ColumnMsg.HeaderText = "信息";
+            this.ColumnMsg.Name = "ColumnMsg";
+            this.ColumnMsg.ReadOnly = true;
             // 
             // menuStrip1
             // 
@@ -183,82 +259,6 @@
             this.测试ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
             this.测试ToolStripMenuItem.Text = "测试";
             this.测试ToolStripMenuItem.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 496);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 15);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "PLC:";
-            // 
-            // progressBarPLC
-            // 
-            this.progressBarPLC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.progressBarPLC.Location = new System.Drawing.Point(57, 496);
-            this.progressBarPLC.Name = "progressBarPLC";
-            this.progressBarPLC.Size = new System.Drawing.Size(29, 15);
-            this.progressBarPLC.TabIndex = 6;
-            this.progressBarPLC.Value = 100;
-            // 
-            // progressBarSQL
-            // 
-            this.progressBarSQL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.progressBarSQL.Location = new System.Drawing.Point(162, 496);
-            this.progressBarSQL.Name = "progressBarSQL";
-            this.progressBarSQL.Size = new System.Drawing.Size(29, 15);
-            this.progressBarSQL.TabIndex = 8;
-            this.progressBarSQL.Value = 100;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(119, 496);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(39, 15);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "SQL:";
-            // 
-            // progressBarPulse
-            // 
-            this.progressBarPulse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.progressBarPulse.Location = new System.Drawing.Point(307, 496);
-            this.progressBarPulse.Name = "progressBarPulse";
-            this.progressBarPulse.Size = new System.Drawing.Size(29, 15);
-            this.progressBarPulse.TabIndex = 10;
-            this.progressBarPulse.Value = 100;
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(226, 496);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 15);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "握手信号:";
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.ColumnTime.Frozen = true;
-            this.ColumnTime.HeaderText = "时间";
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 150;
-            // 
-            // ColumnMsg
-            // 
-            this.ColumnMsg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnMsg.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ColumnMsg.HeaderText = "信息";
-            this.ColumnMsg.Name = "ColumnMsg";
-            this.ColumnMsg.ReadOnly = true;
             // 
             // FormShow
             // 
