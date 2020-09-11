@@ -70,7 +70,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(783, 516);
+            this.panel1.Size = new System.Drawing.Size(778, 516);
             this.panel1.TabIndex = 0;
             // 
             // progressBarPulse
@@ -140,9 +140,10 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.tabControl1.Location = new System.Drawing.Point(0, 28);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(780, 461);
+            this.tabControl1.Size = new System.Drawing.Size(775, 461);
             this.tabControl1.TabIndex = 4;
             // 
             // tabPage1
@@ -151,7 +152,7 @@
             this.tabPage1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tabPage1.Location = new System.Drawing.Point(4, 28);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(772, 429);
+            this.tabPage1.Size = new System.Drawing.Size(767, 429);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "显示";
             // 
@@ -215,7 +216,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(783, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(778, 28);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -264,10 +265,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(221)))), ((int)(((byte)(189)))));
             this.ClientSize = new System.Drawing.Size(783, 516);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormShow";
+            this.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FormShow";
             this.Load += new System.EventHandler(this.FormShow_Load);

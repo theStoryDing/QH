@@ -35,7 +35,7 @@ namespace CaterUI
                 Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
                 AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
                 Loading();
-                Application.Run(new FormShow());
+                Application.Run(new FormMain());
             }
             else
             {

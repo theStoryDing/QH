@@ -42,8 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BatteryStatusInfo.cs" />
-    <Compile Include="DESHelper.cs" />
-    <Compile Include="Md5Helper.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="InitFromInfo.cs" />
+    <Compile Include="PLCInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

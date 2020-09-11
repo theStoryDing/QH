@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--IP信息配置文件-->
+<Info>
+  <!--Ip-->
+  <plc1>
+    <device>分选机</device>
+    <ip>192.168.2.1</ip>
+    <port>4840</port>
+    <ns>3</ns>
+  </plc1>
+  <plc2>
+    <device>分选机</device>
+    <ip>192.168.1.1</ip>
+    <port>4840</port>
+    <ns>3</ns>
+  </plc2>
+  <plc3>
+    <device>分选机</device>
+    <ip>118.24.36.220</ip>
+    <port>62547</port>
+    <ns>2</ns>
+  </plc3>
+</Info>

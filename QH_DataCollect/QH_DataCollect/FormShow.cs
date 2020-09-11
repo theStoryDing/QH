@@ -30,23 +30,23 @@ namespace CaterUI
         /// 握手信号指示灯
         /// </summary>
         MyProgressBar BarPulse = null;
-
+        
         //表格组件的最大行数
         public readonly int MaxTableRowNum = 38;
         //指示灯
-        public List<MyProgressBar> LampList = new List<MyProgressBar>();
+        public List<MyProgressBar> ListLamp = new List<MyProgressBar>();
         //生成textBox控件用来显示顺序
-        public List<TextBox> TextBoxesNumList = new List<TextBox>();
+        public List<TextBox> ListTextBoxesNum = new List<TextBox>();
         //生成textBox控件用来显示条码
-        public List<TextBox> TextBoxesCodeList = new List<TextBox>();     
+        public List<TextBox> ListTextBoxesCode = new List<TextBox>();     
         //生成表格组件
         public TableLayoutPanel TablePanel = null;       
         #endregion
 
-        public FormShow()
+        public FormShow(int i)
         {
             InitializeComponent();
-            //this.TopLevel = false; // 不是最顶层窗体
+            this.TopLevel = false; // 不是最顶层窗体
             //缓存机制，防止闪烁
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
@@ -177,7 +177,7 @@ namespace CaterUI
             {
                 if (0 == i)
                 {
-                    TextBoxesNumList.Add(new TextBox()
+                    ListTextBoxesNum.Add(new TextBox()
                     {
                         TextAlign = HorizontalAlignment.Center,
                         Text = "托盘",
@@ -187,7 +187,7 @@ namespace CaterUI
                 }
                 else
                 {
-                    TextBoxesNumList.Add(new TextBox()
+                    ListTextBoxesNum.Add(new TextBox()
                     {
                         TextAlign = HorizontalAlignment.Center,
                         Text = i.ToString(),
@@ -196,7 +196,7 @@ namespace CaterUI
                     });
                 }
 
-                TextBoxesCodeList.Add(new TextBox()
+                ListTextBoxesCode.Add(new TextBox()
                 {
                     TextAlign = HorizontalAlignment.Center,
                     ReadOnly = true,
@@ -206,7 +206,7 @@ namespace CaterUI
 
                 });
 
-                LampList.Add(new MyProgressBar()
+                ListLamp.Add(new MyProgressBar()
                 {
                     Dock = DockStyle.Fill,
                     Minimum = 0,
@@ -216,12 +216,12 @@ namespace CaterUI
                 });
               
                 //按顺序添加控件
-                TablePanel.Controls.Add(TextBoxesNumList[i], 0, i);
-                TablePanel.Controls.Add(TextBoxesCodeList[i], 1, i);
-                TablePanel.Controls.Add(LampList[i], 2, i);
+                TablePanel.Controls.Add(ListTextBoxesNum[i], 0, i);
+                TablePanel.Controls.Add(ListTextBoxesCode[i], 1, i);
+                TablePanel.Controls.Add(ListLamp[i], 2, i);
                 //鼠标移动到控件上方变色
-                TextBoxesCodeList[i].MouseMove += ChangeTextColor;
-                TextBoxesCodeList[i].MouseLeave += RecoverTextColor;
+                ListTextBoxesCode[i].MouseMove += ChangeTextColor;
+                ListTextBoxesCode[i].MouseLeave += RecoverTextColor;
 
             }
         }
@@ -274,8 +274,8 @@ namespace CaterUI
         {
             Action<BatteryStatusInfo> act = (str) =>
             {
-                TextBoxesCodeList[batteryInfo.Index].Text = batteryInfo.Code;
-                LampList[batteryInfo.Index].BackColor = (batteryInfo.IsOK) ? Color.FromArgb(6, 176, 37) : Color.FromArgb(252, 71, 71);
+                ListTextBoxesCode[batteryInfo.Index].Text = batteryInfo.Code;
+                ListLamp[batteryInfo.Index].BackColor = (batteryInfo.IsOK) ? Color.FromArgb(6, 176, 37) : Color.FromArgb(252, 71, 71);
             };
             this.Invoke(act, batteryInfo);
         }
