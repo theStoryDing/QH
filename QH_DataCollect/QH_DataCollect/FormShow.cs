@@ -56,23 +56,6 @@ namespace CaterUI
         {
             //更新界面
             UpdateLayOut();
-            for(int i = 0; i <=50; i++)
-            {
-                UpdateShowMessage("测试");
-                UpdateShowMessage("sdfsdfsfs");
-                UpdateShowMessage("声明懂西少时诵诗书反反复复付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付所所所所所所所所所所所所所所所所所所所所所所所所");
-                UpdateShowMessage("sdfsdfsfs");
-            }
-            
-            
-            BatteryStatusInfo info = new BatteryStatusInfo
-            {
-                Index = 12,
-                Code = "djdjdjjdjdjdjddkdkkdkdkdk",
-                IsOK = true
-            };
-            UpdateTextAndBarStatus(info);
-
         }
 
         #region 更新界面布局
@@ -285,13 +268,6 @@ namespace CaterUI
         private void 清屏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dgvMessage.Rows.Clear();
-            DirectoryInfo str = new DirectoryInfo(string.Format(@"{0}..\..\..\config\Common.xml", Application.StartupPath));
-            string path = str.FullName;
-            string x = XMLHelper.ReadNode(path, "title");
-            UpdateShowMessage(x);
-            XMLHelper.WriteNode(path, "title", "QH数据采集程序");
-            x = XMLHelper.ReadNode(path, "title");
-            UpdateShowMessage(x);
         }
 
     }

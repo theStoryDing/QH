@@ -15,6 +15,7 @@ namespace CaterModel
         /// 存放PLC信息的表单
         /// </summary>
         public static List<PLCInfo> ListPLCInfo = new List<PLCInfo>();
+
         
     }
 }

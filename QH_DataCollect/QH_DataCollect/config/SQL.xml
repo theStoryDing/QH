@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--数据库配置文件-->
+<SQL>
+  <!--数据库服务器地址-->
+  <server>10.62.178.3</server>
+  <!--数据库名-->
+  <db>qh_formation_sorting</db>
+  <!--用户名-->
+  <userid>CQB</userid>
+  <!--密码-->
+  <password>6D80B529F41D03B5</password>
+  <!--是否启用数据库, 0 不启用， 1 启用-->
+  <issave>1</issave>
+</SQL>

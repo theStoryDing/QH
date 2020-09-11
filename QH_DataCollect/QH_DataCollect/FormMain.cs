@@ -32,7 +32,7 @@ namespace CaterUI
             InitializeComponent();
             //缓存机制，防止闪烁
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            this.UpdateStyles();           
+            this.UpdateStyles();
         }
 
         private void FormMain_Load(object sender, EventArgs e)

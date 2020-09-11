@@ -19,8 +19,15 @@ namespace CaterUI
     /// </summary>
     public partial class FormLoad : Form
     {
-        private string Msg { set; get; }   //进度信息
-        private bool IsLoadCompele;  //是否完成加载
+        /// <summary>
+        /// 进度信息
+        /// </summary>
+        private string Msg { set; get; }
+
+        /// <summary>
+        /// 是否完成加载
+        /// </summary>
+        private bool IsLoadCompele;  
 
         public FormLoad()
         {
@@ -30,6 +37,9 @@ namespace CaterUI
             this.progressBar1.Value = 20;
         }
 
+        /// <summary>
+        /// 文件加载线程
+        /// </summary>
         Thread LoadThread = null;
 
         private void FormLoad_Load(object sender, EventArgs e)
@@ -50,8 +60,15 @@ namespace CaterUI
                 Msg = "加载通用配置文件中……";
                 CommonFileLoading();
                 Thread.Sleep(1000);
+
                 Msg = "加载PLC配置文件中……";
                 PLCFileLoading();
+                Thread.Sleep(1000);
+
+                Msg = "加载数据库配置文件中……";
+                SQLFileLoading();
+                Thread.Sleep(1000);
+
                 Msg = "程序正在打开……";
                 Thread.Sleep(1000);
                 IsLoadCompele = true;
@@ -64,7 +81,18 @@ namespace CaterUI
                        
         }
 
-       
+        #region 加载数据库配置文件
+        private void SQLFileLoading()
+        {
+            DirectoryInfo str = new DirectoryInfo(string.Format(@"{0}..\..\..\config\SQL.xml", Application.StartupPath));
+            string path = str.FullName;
+            SQLInfo.Server = XMLHelper.ReadNode(path, "server");
+            SQLInfo.DB = XMLHelper.ReadNode(path, "db");
+            SQLInfo.UserID = XMLHelper.ReadNode(path, "userid");
+            SQLInfo.Password = XMLHelper.ReadNode(path, "password");
+            SQLInfo.IsSave = ("1" == XMLHelper.ReadNode(path, "issave")) ? true : false;
+        }
+        #endregion
 
         #region 加载通用配置文件
         private void CommonFileLoading()
