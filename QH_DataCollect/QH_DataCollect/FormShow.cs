@@ -63,11 +63,17 @@ namespace CaterUI
         {
             //动态添加控件
             UpdateForm();
+            //UpdateForm2();
             //设置datagrideview控件
             UpdateDataGridView();
             //用自定义的progressBar控件覆系统控件
             InitProgressBar();
+
+            ListLamp[22].BackColor = Color.Lime;
+            ListTextBoxesCode[21].Text = "测试aslslslslslslslslsla";
         }
+
+       
 
         #region 用自定义的progressBar控件覆系统控件
         private void InitProgressBar()
@@ -139,7 +145,7 @@ namespace CaterUI
 
         #endregion
 
-        #region 动态生成显示界面
+        #region 方式1 动态生成显示界面
         private void UpdateForm()
         {
             TablePanel = new TableLayoutPanel();
@@ -224,6 +230,126 @@ namespace CaterUI
         #endregion
 
 
+        #endregion
+
+        #region 方式2 动态生成界面
+        private void UpdateForm2()
+        {
+            TablePanel = new TableLayoutPanel();
+            TablePanel.ColumnCount = 6;
+            // 设置cell样式，增加线条
+            TablePanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetPartial;
+            TablePanel.Dock = DockStyle.Fill;
+            TablePanel.AutoScroll = true;
+            TablePanel.Padding = new Padding(0, 0, 10, 10);
+            //每行单元格占比
+            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.05f));
+            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.3f));
+            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.15f));
+
+            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.05f));
+            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.3f));
+            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.15f));
+
+            tabPage1.Controls.Add(TablePanel);
+
+            int textNum = 1;
+            int codeNum = 1;
+            int barNum = 1;
+            for (int row = 0; row <= 19; row++)
+            {
+                for (int column = 0; column <= 5; column++)
+                {
+                    if (0 == row)
+                    {
+                        if (0 == column)
+                        {
+                            ListTextBoxesNum.Add(new TextBox()
+                            {
+                                TextAlign = HorizontalAlignment.Center,
+                                Text = "托盘",
+                                Dock = DockStyle.Fill,
+                                ReadOnly = true,
+                            });
+
+                            ListTextBoxesCode.Add(new TextBox()
+                            {
+                                TextAlign = HorizontalAlignment.Center,
+                                ReadOnly = true,
+                                Dock = DockStyle.Fill,
+                                BackColor = Color.FromArgb(250, 249, 222),
+
+                            });
+
+                            ListLamp.Add(new MyProgressBar()
+                            {
+                                Dock = DockStyle.Fill,
+                                Minimum = 0,
+                                Maximum = 100,
+                                BackColor = Color.FromArgb(252, 71, 71)
+
+                            });
+                            TablePanel.Controls.Add(ListTextBoxesNum[0], 0, row);
+                            TablePanel.Controls.Add(ListTextBoxesCode[0], 1, row);
+                            TablePanel.Controls.Add(ListLamp[0], 2, row);
+                            //鼠标移动到控件上方变色
+                            ListTextBoxesCode[0].MouseMove += ChangeTextColor;
+                            ListTextBoxesCode[0].MouseLeave += RecoverTextColor;
+                        }
+                    }
+                    else
+                    {
+                        if (column == 0 || column == 3)
+                        {
+                            ListTextBoxesNum.Add(new TextBox()
+                            {
+                                TextAlign = HorizontalAlignment.Center,
+                                Text = textNum.ToString(),
+                                Dock = DockStyle.Fill,
+                                ReadOnly = true,
+                            });
+
+                            TablePanel.Controls.Add(ListTextBoxesNum[textNum], column, row);
+                            textNum++;
+                        }
+
+                        if (column == 1 || column == 4)
+                        {
+                            ListTextBoxesCode.Add(new TextBox()
+                            {
+                                TextAlign = HorizontalAlignment.Center,
+                                ReadOnly = true,
+                                Dock = DockStyle.Fill,
+                                BackColor = Color.FromArgb(250, 249, 222),
+
+                            });
+                            TablePanel.Controls.Add(ListTextBoxesCode[codeNum], column, row);
+                            //鼠标移动到控件上方变色
+                            ListTextBoxesCode[codeNum].MouseMove += ChangeTextColor;
+                            ListTextBoxesCode[codeNum].MouseLeave += RecoverTextColor;
+                            codeNum++;
+                        }
+
+                        if (column == 2 || column == 5)
+                        {
+                            ListLamp.Add(new MyProgressBar()
+                            {
+                                Dock = DockStyle.Fill,
+                                Minimum = 0,
+                                Maximum = 100,
+                                BackColor = Color.FromArgb(252, 71, 71)
+
+                            });
+                            TablePanel.Controls.Add(ListLamp[barNum], column, row);
+                            barNum++;
+                        }
+                    }
+
+
+                }
+
+            }
+        }
         #endregion
 
         #endregion
