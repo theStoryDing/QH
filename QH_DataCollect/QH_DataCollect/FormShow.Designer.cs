@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormShow));
             this.panel1 = new System.Windows.Forms.Panel();
             this.progressBarPulse = new System.Windows.Forms.ProgressBar();
@@ -44,11 +44,11 @@
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnMsg = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.IP设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.开始监听ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.开始运行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.测试读写ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清屏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -163,7 +163,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 28);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(772, 429);
+            this.tabPage2.Size = new System.Drawing.Size(767, 429);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "信息";
             // 
@@ -181,7 +181,7 @@
             this.dgvMessage.Name = "dgvMessage";
             this.dgvMessage.ReadOnly = true;
             this.dgvMessage.RowTemplate.Height = 27;
-            this.dgvMessage.Size = new System.Drawing.Size(766, 423);
+            this.dgvMessage.Size = new System.Drawing.Size(761, 423);
             this.dgvMessage.TabIndex = 0;
             // 
             // ColumnTime
@@ -196,9 +196,9 @@
             // ColumnMsg
             // 
             this.ColumnMsg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnMsg.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnMsg.DefaultCellStyle = dataGridViewCellStyle1;
             this.ColumnMsg.HeaderText = "信息";
             this.ColumnMsg.Name = "ColumnMsg";
             this.ColumnMsg.ReadOnly = true;
@@ -209,7 +209,7 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.IP设置ToolStripMenuItem,
-            this.开始监听ToolStripMenuItem,
+            this.开始运行ToolStripMenuItem,
             this.测试读写ToolStripMenuItem,
             this.清屏ToolStripMenuItem,
             this.测试ToolStripMenuItem});
@@ -219,6 +219,14 @@
             this.menuStrip1.Size = new System.Drawing.Size(778, 28);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // 测试ToolStripMenuItem
+            // 
+            this.测试ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.测试ToolStripMenuItem.Name = "测试ToolStripMenuItem";
+            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
+            this.测试ToolStripMenuItem.Text = "测试";
+            this.测试ToolStripMenuItem.Click += new System.EventHandler(this.测试ToolStripMenuItem_Click);
             // 
             // IP设置ToolStripMenuItem
             // 
@@ -230,11 +238,11 @@
             // 
             // 开始监听ToolStripMenuItem
             // 
-            this.开始监听ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
-            this.开始监听ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("开始监听ToolStripMenuItem.Image")));
-            this.开始监听ToolStripMenuItem.Name = "开始监听ToolStripMenuItem";
-            this.开始监听ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
-            this.开始监听ToolStripMenuItem.Text = "开始监听";
+            this.开始运行ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.开始运行ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("开始监听ToolStripMenuItem.Image")));
+            this.开始运行ToolStripMenuItem.Name = "开始监听ToolStripMenuItem";
+            this.开始运行ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
+            this.开始运行ToolStripMenuItem.Text = "开始运行";
             // 
             // 测试读写ToolStripMenuItem
             // 
@@ -252,14 +260,6 @@
             this.清屏ToolStripMenuItem.Size = new System.Drawing.Size(71, 24);
             this.清屏ToolStripMenuItem.Text = "清屏";
             this.清屏ToolStripMenuItem.Click += new System.EventHandler(this.清屏ToolStripMenuItem_Click);
-            // 
-            // 测试ToolStripMenuItem
-            // 
-            this.测试ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
-            this.测试ToolStripMenuItem.Name = "测试ToolStripMenuItem";
-            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
-            this.测试ToolStripMenuItem.Text = "测试";
-            this.测试ToolStripMenuItem.Visible = false;
             // 
             // FormShow
             // 
@@ -291,7 +291,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem IP设置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 开始监听ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 开始运行ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 测试读写ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 清屏ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 测试ToolStripMenuItem;

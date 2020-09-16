@@ -1,4 +1,5 @@
-﻿using CaterModel;
+﻿using CaterCommon;
+using CaterModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,6 +18,15 @@ namespace CaterUI
     /// </summary>
     public partial class FormMain : Form
     {
+
+        #region 变量
+        //定时刷新日志数
+        private System.Threading.Timer RefreshLogTimer;
+        //采用同步上下文方式更改UI线程中属性
+        SynchronizationContext SyncContext = null;   
+
+        #endregion
+
         #region GUI
         //界面窗体链表
         public List<FormShow> ListDisplayForm = new List<FormShow>();
@@ -26,20 +37,68 @@ namespace CaterUI
         private List<TabPage> ListTabPage = new List<TabPage>();
         #endregion
 
+        #region 窗体成员变量
+        public FormLogin LoginForm;
+
+        #endregion
 
         public FormMain()
         {
             InitializeComponent();
+            
             //缓存机制，防止闪烁
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
+            SyncContext = SynchronizationContext.Current;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            //标题
+            this.Text = InitFormInfo.Title;
+            //软件开启时间
+            tssl_startTime.Text = string.Format("软件开启：{0}", DateTime.Now);
+            //本机IP地址
+            tssl_localIP.Text = string.Format("本地IP：{0}", GetLocalIp());
+            //登录状态
             //界面布局
             UpdateLayOut();
+            //注册用户登录事件
+            LoginForm = new FormLogin();
+            UserInfo.CurrentLevel = UserInfo.UserLevel.Administrator;
+            LoginForm.LoginEvent += UserLogin;
+            UserLogin("管理员");
+
+            //定时刷新控件状态
+            RefreshLogTimer = new System.Threading.Timer(LogRefresh, null, 0, Timeout.Infinite);
+
+
         }
+
+
+        #region 日志数刷新
+        private void LogRefresh(object state)
+        {
+            SendOrPostCallback callback = o =>
+            {
+                tssl_errorLog.Text = LogHelper.ErrorCount.ToString();
+                tssl_fatalLog.Text = LogHelper.FatalCount.ToString();
+
+                //日志文件错误数
+
+                if (99999 < (LogHelper.FatalCount + LogHelper.ErrorCount))
+                {
+                    LogHelper.FatalCount = 0;
+                    LogHelper.ErrorCount = 0;
+                }
+            };
+            SyncContext.Post(callback, null);
+            if (null != RefreshLogTimer)
+            {               
+                RefreshLogTimer.Change(350, Timeout.Infinite);
+            }
+        }
+        #endregion
 
         #region 防止闪屏
         protected override CreateParams CreateParams
@@ -52,7 +111,6 @@ namespace CaterUI
             }
         }
         #endregion
-
 
         #region 界面布局
         private void UpdateLayOut()
@@ -277,6 +335,114 @@ namespace CaterUI
         }
 
         #endregion
-    
+
+        #region 获取本地IP
+        private string GetLocalIp()
+        {
+
+            string ip = string.Empty;
+            foreach (System.Net.IPAddress _ip in System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList)
+            {
+                if (_ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    ip = _ip.ToString();
+                    break;
+                }
+
+            }
+            return ip;
+        }
+
+        #endregion
+
+        #region 用户登录触发事件
+        private void UserLogin(string user)
+        {
+            switch (user)
+            {
+                case "管理员":
+                    UserInfo.CurrentLevel = UserInfo.UserLevel.Administrator;
+                    break;
+                case "工程师":
+                    UserInfo.CurrentLevel = UserInfo.UserLevel.Technician;
+                    //登录计时
+                    timerLogin.Start();
+                    break;
+                default:
+                    break;
+            }
+            tssl_currentUser.Text = user;
+            UpdateControlStatus();
+
+        }
+
+        /// <summary>
+        /// 更新控件状态
+        /// </summary>
+        private void UpdateControlStatus()
+        {
+            //程序是否在运行
+            bool isOnLine = (RunState.RunMode.OnLine == RunState.CurrentRunMode) ? true : false;
+            //工程师
+            bool isTech = (UserInfo.UserLevel.Technician == UserInfo.CurrentLevel) ? true : false;
+            //管理员
+            bool isAdmin = (UserInfo.UserLevel.Administrator == UserInfo.CurrentLevel) ? true : false;
+            //在线状态时，更改菜单栏状态
+
+            this.设置ToolStripMenuItem.Enabled = isTech && !isOnLine;
+            this.配置文件ToolStripMenuItem.Enabled = isTech && !isOnLine;
+
+            if (isOnLine)
+            {
+                // this.Spinner.BackColor = System.Drawing.Color.ActiveCaption;
+                this.Spinner.Cursor = System.Windows.Forms.Cursors.Arrow;
+                this.Spinner.Style = DMSkin.Metro.MetroColorStyle.Lime;
+                this.Spinner.Theme = DMSkin.Metro.MetroThemeStyle.Light;
+
+                tssl_currentState.ForeColor = Color.LimeGreen;
+                tssl_currentState.Text = "在线";
+            }
+            else
+            {
+                // this.Spinner.BackColor = System.Drawing.;
+                this.Spinner.Cursor = System.Windows.Forms.Cursors.Arrow;
+                this.Spinner.Style = DMSkin.Metro.MetroColorStyle.Red;
+                this.Spinner.Theme = DMSkin.Metro.MetroThemeStyle.Light;
+
+                tssl_currentState.ForeColor = Color.OrangeRed;
+                tssl_currentState.Text = "离线";
+            }
+            btn_StopRunning.Enabled = isOnLine;
+            btn_Run.Enabled = !isOnLine;
+
+            //用户登录更新子菜单操作 如果满足工程师权限且非在线状态则允许操作菜单，否则禁止
+            for (int i = 0; i < InitFormInfo.WorkFlowNums; i++)
+            {
+                ListDisplayForm[i].UpdateFormDataAccessLevelMenuState(isTech, isOnLine);
+            }
+        }
+        #endregion
+
+        #region 登录计时器
+        private void timerLogin_Tick(object sender, EventArgs e)
+        {
+            timerLogin.Stop();
+
+        }
+        #endregion
+
+        private void 登录ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (null != LoginForm)
+            {
+                LoginForm.StartPosition = FormStartPosition.CenterParent;
+                LoginForm.ShowDialog();
+            }
+        }
+
+        private void 注销ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UserLogin("管理员");
+        }
     }
 }

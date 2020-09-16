@@ -15,6 +15,13 @@ namespace CaterUI
 {
     public partial class FormShow : Form
     {
+
+        #region 变量
+
+        public const string StartMenuText = "开始运行";
+        public const string StopMenuText = "停止运行";
+
+        #endregion
         #region UI控件
         /// <summary>
         /// PLC指示灯
@@ -69,8 +76,6 @@ namespace CaterUI
             //用自定义的progressBar控件覆系统控件
             InitProgressBar();
 
-            ListLamp[22].BackColor = Color.Lime;
-            ListTextBoxesCode[21].Text = "测试aslslslslslslslslsla";
         }
 
        
@@ -157,8 +162,8 @@ namespace CaterUI
             TablePanel.Padding = new Padding(0, 0, 10, 0);
             //每行单元格占比
             TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.1f));
-            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.8f));
-            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.1f));
+            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.85f));
+            TablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0.05f));
            
             tabPage1.Controls.Add(TablePanel);
 
@@ -368,7 +373,25 @@ namespace CaterUI
                 //dgvMessage.FirstDisplayedScrollingRowIndex = dgvMessage.RowCount - 1;
                 dgvMessage.CurrentCell = dgvMessage.Rows[dgvMessage.RowCount - 1].Cells[0];
             };
-            this.Invoke(act, strData);
+            this.BeginInvoke(act, strData);
+
+            // 安全访问控件
+            //if (dgvMessage.InvokeRequired)
+            //{
+            //    while (!dgvMessage.IsHandleCreated)
+            //    {
+            //        if (dgvMessage.Disposing || dgvMessage.IsDisposed)
+            //        {
+            //            return;
+            //        }
+            //        this.BeginInvoke(act, strData);
+            //    }
+            //}
+            //else
+            //{
+            //    act(strData);
+            //}
+
         }
         #endregion
 
@@ -394,7 +417,32 @@ namespace CaterUI
         private void 清屏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dgvMessage.Rows.Clear();
+           
         }
 
+        private void 测试ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateShowMessage("测试");
+            LogHelper.Error("测试");
+            LogHelper.Fatal("测试");
+        }
+
+        #region 主界面用户权限更改通知窗体改变菜单栏
+        public void UpdateFormDataAccessLevelMenuState(bool bTech, bool bOnLine)
+        {
+            this.IP设置ToolStripMenuItem.Enabled = bTech && !bOnLine;
+            //this.开始运行ToolStripMenuItem.Enabled = bTech && !bOnLine;
+            this.测试读写ToolStripMenuItem.Enabled = bTech && !bOnLine;
+            //如果是开始实时，则菜单栏 开始运行 更改为 停止运行
+            if (bOnLine)
+            {
+                this.开始运行ToolStripMenuItem.Text = StopMenuText;
+            }
+            else
+            {
+                this.开始运行ToolStripMenuItem.Text = StartMenuText;
+            }
+        }
+        #endregion
     }
 }

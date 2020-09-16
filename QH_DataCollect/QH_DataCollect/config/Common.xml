@@ -4,9 +4,9 @@
 -->
 <Config>
   <!--标题-->
-  <title>QH数据采集程序</title>
+  <title>QH数据采集程序--模板</title>
   <!--工作流程数-->
-  <workFlowNums>3</workFlowNums>
+  <workFlowNums>1</workFlowNums>
   <!--选择使用PLC，欧姆龙PLC:Omron, 西门子PLC:Siemens-->
   <plc>Siemens</plc>
 </Config>

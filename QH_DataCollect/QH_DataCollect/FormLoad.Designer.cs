@@ -68,7 +68,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblShow.AutoSize = true;
             this.lblShow.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblShow.Location = new System.Drawing.Point(250, 74);
+            this.lblShow.Location = new System.Drawing.Point(212, 74);
             this.lblShow.Name = "lblShow";
             this.lblShow.Size = new System.Drawing.Size(109, 20);
             this.lblShow.TabIndex = 2;

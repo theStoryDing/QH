@@ -89,7 +89,7 @@ namespace CaterUI
             SQLInfo.Server = XMLHelper.ReadNode(path, "server");
             SQLInfo.DB = XMLHelper.ReadNode(path, "db");
             SQLInfo.UserID = XMLHelper.ReadNode(path, "userid");
-            SQLInfo.Password = XMLHelper.ReadNode(path, "password");
+            SQLInfo.Password = DESHelper.Decode(XMLHelper.ReadNode(path, "password"));
             SQLInfo.IsSave = ("1" == XMLHelper.ReadNode(path, "issave")) ? true : false;
         }
         #endregion

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.用户ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,6 +71,7 @@
             this.btn_StopRunning = new DMSkin.Controls.DMButton();
             this.btn_exit2 = new DMSkin.Controls.DMButton();
             this.btn_Run = new DMSkin.Controls.DMButton();
+            this.timerLogin = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -107,15 +109,17 @@
             // 
             this.登录ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("登录ToolStripMenuItem.Image")));
             this.登录ToolStripMenuItem.Name = "登录ToolStripMenuItem";
-            this.登录ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
+            this.登录ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.登录ToolStripMenuItem.Text = "登录";
+            this.登录ToolStripMenuItem.Click += new System.EventHandler(this.登录ToolStripMenuItem_Click);
             // 
             // 注销ToolStripMenuItem
             // 
             this.注销ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("注销ToolStripMenuItem.Image")));
             this.注销ToolStripMenuItem.Name = "注销ToolStripMenuItem";
-            this.注销ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
+            this.注销ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.注销ToolStripMenuItem.Text = "注销";
+            this.注销ToolStripMenuItem.Click += new System.EventHandler(this.注销ToolStripMenuItem_Click);
             // 
             // 设置ToolStripMenuItem
             // 
@@ -511,6 +515,11 @@
             this.btn_Run.UseMnemonic = false;
             this.btn_Run.UseVisualStyleBackColor = false;
             // 
+            // timerLogin
+            // 
+            this.timerLogin.Interval = 60000;
+            this.timerLogin.Tick += new System.EventHandler(this.timerLogin_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -581,6 +590,7 @@
         private DMSkin.Controls.DMButton btn_exit2;
         private DMSkin.Controls.DMButton btn_Run;
         private System.Windows.Forms.Panel panelMain;
+        private System.Windows.Forms.Timer timerLogin;
     }
 }
 
