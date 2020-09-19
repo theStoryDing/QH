@@ -75,6 +75,12 @@
     <Compile Include="FormPassword.Designer.cs">
       <DependentUpon>FormPassword.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormPLC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPLC.Designer.cs">
+      <DependentUpon>FormPLC.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +105,12 @@
     <Compile Include="FormSQL.Designer.cs">
       <DependentUpon>FormSQL.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTest.Designer.cs">
+      <DependentUpon>FormTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="MyProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -116,6 +128,9 @@
     <EmbeddedResource Include="FormPassword.resx">
       <DependentUpon>FormPassword.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormPLC.resx">
+      <DependentUpon>FormPLC.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormProgress.resx">
       <DependentUpon>FormProgress.cs</DependentUpon>
     </EmbeddedResource>
@@ -127,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormSQL.resx">
       <DependentUpon>FormSQL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTest.resx">
+      <DependentUpon>FormTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

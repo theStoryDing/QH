@@ -115,6 +115,7 @@
             this.btn_cancel.TabIndex = 30;
             this.btn_cancel.Text = "退出";
             this.btn_cancel.UseVisualStyleBackColor = true;
+            this.btn_cancel.Click += new System.EventHandler(this.Btn_cancel_Click);
             // 
             // btn_save
             // 
@@ -125,7 +126,7 @@
             this.btn_save.TabIndex = 29;
             this.btn_save.Text = "保存并应用";
             this.btn_save.UseVisualStyleBackColor = true;
-            this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
+            this.btn_save.Click += new System.EventHandler(this.Btn_save_Click);
             // 
             // label4
             // 

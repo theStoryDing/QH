@@ -439,7 +439,7 @@
             this.btn_StopRunning.Text = "停止";
             this.btn_StopRunning.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btn_StopRunning.UseVisualStyleBackColor = false;
-            this.btn_StopRunning.Click += new System.EventHandler(this.btn_StopRunning_Click);
+            this.btn_StopRunning.Click += new System.EventHandler(this.Btn_StopRunning_Click);
             // 
             // btn_exit
             // 
@@ -464,7 +464,7 @@
             this.btn_exit.Text = "退出";
             this.btn_exit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btn_exit.UseVisualStyleBackColor = false;
-            this.btn_exit.Click += new System.EventHandler(this.btn_exit_Click);
+            this.btn_exit.Click += new System.EventHandler(this.Btn_exit_Click);
             // 
             // btn_Run
             // 
@@ -493,18 +493,18 @@
             this.btn_Run.UseCompatibleTextRendering = true;
             this.btn_Run.UseMnemonic = false;
             this.btn_Run.UseVisualStyleBackColor = false;
-            this.btn_Run.Click += new System.EventHandler(this.btn_Run_Click);
+            this.btn_Run.Click += new System.EventHandler(this.Btn_Run_Click);
             // 
             // timerLogin
             // 
             this.timerLogin.Interval = 60000;
-            this.timerLogin.Tick += new System.EventHandler(this.timerLogin_Tick);
+            this.timerLogin.Tick += new System.EventHandler(this.TimerLogin_Tick);
             // 
             // timer_deleteLogFile
             // 
             this.timer_deleteLogFile.Enabled = true;
             this.timer_deleteLogFile.Interval = 60000;
-            this.timer_deleteLogFile.Tick += new System.EventHandler(this.timer_deleteLogFile_Tick);
+            this.timer_deleteLogFile.Tick += new System.EventHandler(this.Timer_deleteLogFile_Tick);
             // 
             // FormMain
             // 

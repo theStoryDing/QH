@@ -41,7 +41,7 @@ namespace CaterUI
             }
         }
 
-        private void btn_save_Click(object sender, EventArgs e)
+        private void Btn_save_Click(object sender, EventArgs e)
         {
             try
             {
@@ -73,6 +73,11 @@ namespace CaterUI
             {
                 LogHelper.Error("数据库参数变更发生异常！", ex);
             }
+        }
+
+        private void Btn_cancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormShow));
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblPulse = new System.Windows.Forms.Label();
@@ -187,9 +187,9 @@
             // ColumnMsg
             // 
             this.ColumnMsg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnMsg.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnMsg.DefaultCellStyle = dataGridViewCellStyle2;
             this.ColumnMsg.HeaderText = "信息";
             this.ColumnMsg.Name = "ColumnMsg";
             this.ColumnMsg.ReadOnly = true;
@@ -218,6 +218,7 @@
             this.IP设置ToolStripMenuItem.Name = "IP设置ToolStripMenuItem";
             this.IP设置ToolStripMenuItem.Size = new System.Drawing.Size(128, 24);
             this.IP设置ToolStripMenuItem.Text = "PLC通讯设置";
+            this.IP设置ToolStripMenuItem.Click += new System.EventHandler(this.IP设置ToolStripMenuItem_Click);
             // 
             // 开始运行ToolStripMenuItem
             // 
@@ -235,6 +236,7 @@
             this.测试读写ToolStripMenuItem.Name = "测试读写ToolStripMenuItem";
             this.测试读写ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
             this.测试读写ToolStripMenuItem.Text = "测试读写";
+            this.测试读写ToolStripMenuItem.Click += new System.EventHandler(this.测试读写ToolStripMenuItem_Click);
             // 
             // 清屏ToolStripMenuItem
             // 

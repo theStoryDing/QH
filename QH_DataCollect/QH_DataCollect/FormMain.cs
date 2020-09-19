@@ -96,6 +96,13 @@ namespace CaterUI
                     LogHelper.FatalCount = 0;
                     LogHelper.ErrorCount = 0;
                 }
+
+                //更新显示的PLCIP地址
+                if(0 != Global.PLCIndex[0])
+                {
+                    ListLabelControl[Global.PLCIndex[1]].Text = string.Format("PLC {0}:[{1}]", Global.PLCIndex[1]+1, Global.ListPLCInfo[Global.PLCIndex[1]].IP);
+                    Global.PLCIndex[0] = 0;
+                }
             };
             SyncContext.Post(callback, null);
             if (null != RefreshLogTimer)
@@ -428,7 +435,7 @@ namespace CaterUI
         #endregion
 
         #region 登录计时器
-        private void timerLogin_Tick(object sender, EventArgs e)
+        private void TimerLogin_Tick(object sender, EventArgs e)
         {
             timerLogin.Stop();
 
@@ -498,12 +505,12 @@ namespace CaterUI
         }
         #endregion
 
-        private void btn_exit_Click(object sender, EventArgs e)
+        private void Btn_exit_Click(object sender, EventArgs e)
         {
             FormMain_FormClosing(null, null);
         }
 
-        private void btn_Run_Click(object sender, EventArgs e)
+        private void Btn_Run_Click(object sender, EventArgs e)
         {
             PLCStart();
         }
@@ -535,7 +542,7 @@ namespace CaterUI
         }
         #endregion
 
-        private void btn_StopRunning_Click(object sender, EventArgs e)
+        private void Btn_StopRunning_Click(object sender, EventArgs e)
         {
             PCLStop();
         }
@@ -576,7 +583,7 @@ namespace CaterUI
 
         #endregion
 
-        private void timer_deleteLogFile_Tick(object sender, EventArgs e)
+        private void Timer_deleteLogFile_Tick(object sender, EventArgs e)
         {
             LogHelper.DeleteLogFile(LogHelper.LogFileExistDay);
         }

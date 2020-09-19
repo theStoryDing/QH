@@ -24,6 +24,8 @@ namespace CaterUI
         //程序运行模式设置
         public enum RunMode { None, OnLine, OffLine, OnListen, OffListen }
         public RunMode currentRunMode = RunMode.OffLine;
+
+        FormPLC PLCForm;
         #endregion
 
         #region 数据库变量
@@ -273,6 +275,7 @@ namespace CaterUI
                     PLCOmron.Dispose();
                     PLCOmron = null;
                 }
+                //注意：连接多个PLC时，要根据连接不同的端口
                 PLCOmron = new PLC64Omron(Global.ListPLCInfo[Index].IP, 2, this.Container);
 
                 //PLC_Connect_Omron();
@@ -1149,10 +1152,73 @@ namespace CaterUI
 
         }
 
+
+
+
         #endregion
 
-        
+        private void IP设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (null == PLCForm || PLCForm.IsDisposed)
+            {
+                PLCForm = new FormPLC(Index);
+                PLCForm.ChangePLCIPEvent += ChangePLCIP;
+                PLCForm.Show(this);
 
+            }
+            else
+            {
+                PLCForm.Activate();
+            }
+        }
+
+        #region 更改PLCIP时触发事件
+        private void ChangePLCIP()
+        {
+            UpdateShowMessage("PLC IP 地址变更，断开连接，正在重新初始化……");
+            Global.PLCIndex[0] = 1;
+            Global.PLCIndex[1] = Index;
+            //重连PLC
+            //InitPLC();
+            new Task(() => InitPLC()).Start();
+        }
+        #endregion
+
+        private void 测试读写ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch(InitFormInfo.PLC)
+            {
+                case "Omron":
+                    OmronPLCTest();
+                    break;
+                case "Siemens":
+                    SiemensPLCTest();
+                    break;
+            }
+        }
+
+        #region 西门子测试
+        private void SiemensPLCTest()
+        {
+            using (FormTest plc = new FormTest(PLCSiemens, Index))
+            {
+                plc.StartPosition = FormStartPosition.CenterScreen;
+                plc.ShowDialog();
+
+            }
+        }
+        #endregion
+
+        #region 欧姆龙PLC读写测试
+        private void OmronPLCTest()
+        {
+            using (FormTest plc = new FormTest(PLCOmron, Index))
+            {
+                plc.StartPosition = FormStartPosition.CenterScreen;
+                plc.ShowDialog();
+            }
+        }
+        #endregion
 
     }
 }
