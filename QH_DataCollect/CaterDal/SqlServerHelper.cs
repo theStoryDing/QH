@@ -15,12 +15,24 @@ namespace CaterDal
     public partial class SqlServerHelper
     {
         //获取连接字符串
-        private static string connStr = string.Format("server = {0};database={1};uid={2};pwd={3};Integrated Security = false; MultipleActiveResultSets=true",
-                                         SQLInfo.Server,SQLInfo.DB,SQLInfo.UserID,SQLInfo.Password);
+        //private static string connStr;
+
+        /// <summary>
+        /// 超时时间
+        /// </summary>
+        public static int CommandTimeOut = 600;
+
+        public static string GetConnStr()
+        {
+            string str = string.Format("server = {0};database={1};uid={2};pwd={3};Integrated Security = false; MultipleActiveResultSets=true",
+                                         SQLInfo.Server, SQLInfo.DB, SQLInfo.UserID, SQLInfo.Password);
+            return str;
+        }
 
         #region 是否可以连接数据库
         public static bool IsConnectSql()
         {
+            var connStr = GetConnStr();
             using (SqlConnection SqlConn = new SqlConnection(connStr))
             {
                 try
@@ -47,6 +59,7 @@ namespace CaterDal
         /// <returns>影响行数</returns>
         public static int ExecuteNonQuery(CommandType type, string sql, params SqlParameter[] ps)
         {
+            var connStr = GetConnStr();
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -57,11 +70,7 @@ namespace CaterDal
                     SqlTransaction tran = conn.BeginTransaction();                   
                     try
                     {
-                        cmd.CommandType = type;
-                        cmd.CommandText = sql;
-                        cmd.Transaction = tran;
-                        //把参数添加到cmd命令中。
-                        cmd.Parameters.AddRange(ps);
+                        PrepareCommand(cmd, conn, tran, type, sql, ps);
                         num = cmd.ExecuteNonQuery();
                         tran.Commit();
                         cmd.Parameters.Clear();
@@ -92,16 +101,14 @@ namespace CaterDal
         /// <return>首行首列</returns>
         public static object ExecuteScalar(CommandType type, string sql, params SqlParameter[] ps)
         {
+            var connStr = GetConnStr();
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     try
                     {
-                        conn.Open();
-                        cmd.CommandType = type;
-                        cmd.CommandText = sql;
-                        cmd.Parameters.AddRange(ps);
+                        PrepareCommand(cmd, conn, null, type, sql, ps);
                         return cmd.ExecuteScalar();
                     }
                     catch(Exception ex)
@@ -120,8 +127,9 @@ namespace CaterDal
         /// <param name="sql">执行的sql语句</param>
         /// <param name="ps">参数</param>
         /// <returns>结果集</returns>
-        public static DataTable GetDataTable(string sql, params SqlParameter[] ps)
+        public static DataTable GetDataTable(CommandType type, string sql, params SqlParameter[] parms)
         {
+            var connStr = GetConnStr();
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 try
@@ -131,7 +139,8 @@ namespace CaterDal
                     //构造数据表，用于接收查询结果
                     DataTable dt = new DataTable();
                     //添加参数
-                    adapter.SelectCommand.Parameters.AddRange(ps);
+                    adapter.SelectCommand.CommandType = type;
+                    adapter.SelectCommand.Parameters.AddRange(parms);
                     //执行结果
                     adapter.Fill(dt);
                     //返回结果集
@@ -142,6 +151,56 @@ namespace CaterDal
                     throw new Exception("获取结果集失败，原因" + ex.Message);
                 }
                 
+            }
+        }
+
+        //public static DataTable GetDataTable(CommandType type, string sql, params SqlParameter[] parms)
+        //{
+        //    var connStr = GetConnStr();
+        //    using (SqlConnection conn = new SqlConnection(connStr))
+        //    {
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            PrepareCommand(cmd, conn, null, CommandType.StoredProcedure, sql, parms);
+        //            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+        //            //构造数据表，用于接收查询结果
+        //            DataTable dt = new DataTable();
+        //            //执行结果
+        //            adapter.Fill(dt);
+        //            //返回结果集
+        //            return dt;
+        //        }
+        //    }
+        //}
+        #endregion
+
+        #region 预处理 通用命令
+        private static void PrepareCommand(SqlCommand cmd, SqlConnection conn, SqlTransaction tran, CommandType cmdType,string commandText, params SqlParameter[] parms)
+        {
+            if (conn.State != ConnectionState.Open) conn.Open();
+
+            cmd.Connection = conn;
+            cmd.CommandTimeout = CommandTimeOut;
+            // 设置命令文本(存储过程名或SQL语句)
+            cmd.CommandText = commandText;
+            if(null != tran)
+            {
+                cmd.Transaction = tran;
+            }
+            // 设置命令类型.
+            cmd.CommandType = cmdType;
+
+            if (parms != null && parms.Length > 0)
+            {
+                //预处理MySqlParameter参数数组，将为NULL的参数赋值为DBNull.Value;
+                foreach (SqlParameter parameter in parms)
+                {
+                    if ((parameter.Direction == ParameterDirection.InputOutput || parameter.Direction == ParameterDirection.Input) && (parameter.Value == null))
+                    {
+                        parameter.Value = DBNull.Value;
+                    }
+                }
+                cmd.Parameters.AddRange(parms);
             }
         }
         #endregion

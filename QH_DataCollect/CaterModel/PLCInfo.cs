@@ -16,7 +16,7 @@ namespace CaterModel
         private string _deviceName;
         private string _ip;
         private int _port;
-        private string _ns;
+        private int _ns;
 
         /// <summary>
         /// 设备名
@@ -48,7 +48,7 @@ namespace CaterModel
         /// <summary>
         /// 协议NS
         /// </summary>
-        public string NS
+        public int NS
         {
             set { _ns = value; }
             get { return _ns; }

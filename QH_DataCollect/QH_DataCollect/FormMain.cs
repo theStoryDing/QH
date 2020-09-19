@@ -23,7 +23,11 @@ namespace CaterUI
         //定时刷新日志数
         private System.Threading.Timer RefreshLogTimer;
         //采用同步上下文方式更改UI线程中属性
-        SynchronizationContext SyncContext = null;   
+        SynchronizationContext SyncContext = null;
+
+        //程序运行模式设置
+        public enum RunMode { None, OnLine, Test, OffLine }
+        public RunMode CurrentRunMode = RunMode.OffLine;
 
         #endregion
 
@@ -39,6 +43,7 @@ namespace CaterUI
 
         #region 窗体成员变量
         public FormLogin LoginForm;
+        FormQueryData QueryDataForm;
 
         #endregion
 
@@ -382,7 +387,7 @@ namespace CaterUI
         private void UpdateControlStatus()
         {
             //程序是否在运行
-            bool isOnLine = (RunState.RunMode.OnLine == RunState.CurrentRunMode) ? true : false;
+            bool isOnLine = (RunMode.OnLine == CurrentRunMode) ? true : false;
             //工程师
             bool isTech = (UserInfo.UserLevel.Technician == UserInfo.CurrentLevel) ? true : false;
             //管理员
@@ -390,7 +395,6 @@ namespace CaterUI
             //在线状态时，更改菜单栏状态
 
             this.设置ToolStripMenuItem.Enabled = isTech && !isOnLine;
-            this.配置文件ToolStripMenuItem.Enabled = isTech && !isOnLine;
 
             if (isOnLine)
             {
@@ -443,6 +447,161 @@ namespace CaterUI
         private void 注销ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UserLogin("管理员");
+        }
+
+
+
+        #region 退出程序
+        private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MessageBox.Show("将要退出应用程序，请先停止运行程序，以防丢失数据，是否继续？",
+                                "询问", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                try
+                {
+                    FormShowExit();
+
+                    if (null != RefreshLogTimer)
+                    {
+                        RefreshLogTimer.Dispose();
+                    }
+                }
+                finally
+                {
+                    this.Dispose();//放此类占有的资源
+                    System.GC.Collect();
+                    this.Close();
+                    Application.Exit();
+                    System.Environment.Exit(System.Environment.ExitCode);
+                }
+
+            }
+            else
+            {
+                if (null != e) e.Cancel = true;
+            }
+        }
+
+        //子窗体退出
+        private void FormShowExit()
+        {
+            for (int i = 0; i < InitFormInfo.WorkFlowNums; i++)
+            {
+                ListDisplayForm[i].Exit();
+            }
+            ListDisplayForm.Clear();
+        }
+        #endregion
+
+        private void btn_exit_Click(object sender, EventArgs e)
+        {
+            FormMain_FormClosing(null, null);
+        }
+
+        private void btn_Run_Click(object sender, EventArgs e)
+        {
+            PLCStart();
+        }
+
+        #region PLC运行
+        private void PLCStart()
+        {
+            //检测PLC与数据库是否全部链接上
+            bool isRun = true;
+            for (int i = 0; i < InitFormInfo.WorkFlowNums; i++)
+            {
+                isRun = isRun && ListDisplayForm[i].ConnectPLC;
+                isRun = isRun && ListDisplayForm[i].ConnectSQL;
+            }
+            if (isRun)
+            {
+                //窗体状态更改
+                CurrentRunMode = RunMode.OnLine;
+                UpdateControlStatus();
+                for (int i = 0; i < InitFormInfo.WorkFlowNums; i++)
+                {
+                    ListDisplayForm[i].StartListen();
+                }
+            }
+            else
+            {
+                MessageBox.Show("PLC或数据库未连接，程序无法启动，请检查连接！");
+            }
+        }
+        #endregion
+
+        private void btn_StopRunning_Click(object sender, EventArgs e)
+        {
+            PCLStop();
+        }
+
+        #region PLC停止
+        private void PCLStop()
+        {
+            //停止处理
+            for (int i = 0; i < InitFormInfo.WorkFlowNums; i++)
+            {
+                ListDisplayForm[i].StopListen();
+            }
+            //窗体状态更改
+            CurrentRunMode = RunMode.OffLine;
+            UpdateControlStatus();
+        }
+
+        #endregion
+
+        private void 数据库通讯ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (FormSQL sql = new FormSQL())
+            {
+                sql.StartPosition = FormStartPosition.CenterParent;
+                sql.ChangeDBEvent += ChangeDB;
+                sql.ShowDialog();
+            }
+        }
+
+        #region 数据库参数发生变化是触发
+        private void ChangeDB()
+        {
+            for (int i = 0; i < InitFormInfo.WorkFlowNums; i++)
+            {
+                ListDisplayForm[i].InitSQL();
+            }
+        }
+
+        #endregion
+
+        private void timer_deleteLogFile_Tick(object sender, EventArgs e)
+        {
+            LogHelper.DeleteLogFile(LogHelper.LogFileExistDay);
+        }
+
+
+        private void 日志信息ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", Application.StartupPath + "\\log");
+        }
+
+        private void 数据查询ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (null == QueryDataForm || QueryDataForm.IsDisposed)
+            {
+                QueryDataForm = new FormQueryData
+                {
+                    StartPosition = FormStartPosition.Manual,
+                    Size = Screen.PrimaryScreen.WorkingArea.Size
+                };
+                QueryDataForm.Show();
+            }
+            else
+            {
+                QueryDataForm.Activate();
+            }
         }
     }
 }

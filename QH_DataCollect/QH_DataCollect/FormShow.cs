@@ -1,13 +1,10 @@
 ﻿using CaterCommon;
+using CaterDal;
 using CaterModel;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,11 +14,69 @@ namespace CaterUI
     {
 
         #region 变量
-
+        /// <summary>
+        /// 当前窗体索引号
+        /// </summary>
+        private int Index;
         public const string StartMenuText = "开始运行";
         public const string StopMenuText = "停止运行";
 
+        //程序运行模式设置
+        public enum RunMode { None, OnLine, OffLine, OnListen, OffListen }
+        public RunMode currentRunMode = RunMode.OffLine;
         #endregion
+
+        #region 数据库变量
+        //数据库连接状态
+        private bool IsConnectSQL = false;
+        public bool ConnectSQL { get { return IsConnectSQL; } }
+
+        //连接数据库失败次数
+        public int ConnectSQLNum;
+        #endregion
+
+        #region PLC变量
+        //是否连接PLC
+        private bool IsConnectPLC = false;
+        public bool ConnectPLC { get { return IsConnectPLC; } }
+
+        //PLC握手信号
+        private int PLCPulse = 0;
+
+        //握手心跳标志
+        private bool IsStart = false;
+        private bool IsHandshake = false;
+        private bool IsOne = false;
+
+        //欧姆龙PLC
+        PLC64Omron PLCOmron;
+        //西门子plc
+        Class_Siemens PLCSiemens;
+        //触发标志
+        private volatile int ReadTRG = 0;          //PLC触发交互
+        private volatile int OldReadTRG = 1;
+
+        #endregion
+
+        #region 线程
+        //处理数据线程启动开关
+        public bool IsThreadRunning = true;
+        //定时刷新UI
+        private System.Threading.Timer RefreshTimer;
+        //采用同步上下文方式更改UI线程中属性
+        private SynchronizationContext SyncContext = null;
+        //PLC线程取消操作
+        private CancellationTokenSource Cts = null;
+        //处理数据的线程
+        private Thread DealDataThread = null;
+
+        //数据存储队列
+        private BlockQueue<int> BlockQueue = new BlockQueue<int>(100);
+        //数据库 锁
+        private readonly object SQLLock = new object();
+
+        #endregion
+
         #region UI控件
         /// <summary>
         /// PLC指示灯
@@ -33,10 +88,7 @@ namespace CaterUI
         /// </summary>
         MyProgressBar BarSQL = null;
 
-        /// <summary>
-        /// 握手信号指示灯
-        /// </summary>
-        MyProgressBar BarPulse = null;
+      
         
         //表格组件的最大行数
         public readonly int MaxTableRowNum = 38;
@@ -57,13 +109,494 @@ namespace CaterUI
             //缓存机制，防止闪烁
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
+            SyncContext = SynchronizationContext.Current;
+            Index = i;
         }
               
         private void FormShow_Load(object sender, EventArgs e)
         {
             //更新界面
             UpdateLayOut();
+            //初始化线程
+            InitThread();
+            //初始化数据库
+            InitSQL();
+            //PLC 初始化
+            InitPLC();
+
+            //启动线程
+            if (Cts != null)
+            {
+                Cts.Cancel();      //取消PC_PLC_SignalExchange线程
+            }
+            Cts = new CancellationTokenSource();
+            switch (InitFormInfo.PLC)
+            {
+                case "Omron":
+                    new Task(() => PC_PLC_SignalExchange_Omron(Cts.Token, false)).Start();
+                    break;
+                case "Siemens":
+                    new Task(() => PC_PLC_SignalExchange_Siemens(Cts.Token, false)).Start();
+                    break;
+
+            }
+
+
         }
+
+        #region 初始化线程
+        private void InitThread()
+        {
+            //定时刷新控件状态
+            RefreshTimer = new System.Threading.Timer(UIRefresh, null, 0, Timeout.Infinite);
+            //处理队列数据线程
+            DealDataThread = new Thread(DealQueue);
+            DealDataThread.Start();
+
+        }
+        #endregion
+
+        #region 处理队列中的数据
+        private void DealQueue()
+        {
+            while (IsThreadRunning)
+            {
+                try
+                {
+                    DealData();
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Fatal("处理队列线程发生异常！", ex);
+                }
+            }
+        }
+
+        private void DealData()
+        {
+            try
+            {
+                var data = BlockQueue.Dequeue();
+
+               
+            }
+            catch (Exception ex)
+            {
+                UpdateShowMessage("处理数据时发生异常,原因：" + ex.Message);
+                throw new Exception("处理数据时发生异常,原因：" + ex.Message);
+            }
+
+
+        }
+        #endregion
+
+        #region 初始化数据库
+        public void InitSQL()
+        {
+            //测试本机数据库是否可连接
+           new Task(()=> ConnectSQLTest()).Start();
+
+        }
+
+        
+        private void ConnectSQLTest()
+        {
+            try
+            {
+                IsConnectSQL = false;
+                if (!IsConnectSQL)
+                {
+                    IsConnectSQL = SqlServerHelper.IsConnectSql();
+                }
+                if (IsConnectSQL)
+                {
+                    ConnectSQLNum = 0;
+                    UpdateShowMessage("数据库SQL连接成功！");
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateShowMessage("SQL连接异常，原因：" + ex.Message);
+                LogHelper.Fatal("SQL连接异常！", ex);
+
+                ConnectSQLNum++;
+                IsConnectSQL = false;
+                SQLInfo.Server = ".";
+                switch(ConnectSQLNum)
+                {
+                    //更改数据库的地址，尝试重连数据库
+                    case 1:
+                        SQLInfo.Server = ".";
+                        ConnectSQLTest();
+                        break;
+                    case 2:
+                        SQLInfo.Server = "127.0.0.1";
+                        ConnectSQLTest();
+                        break;
+                    case 3:
+                        SQLInfo.Server = "localhost";
+                        ConnectSQLTest();
+                        break;
+                    default:
+                        break;
+                }
+               
+            }
+        }
+
+        #endregion
+
+        #region 初始化plc
+        private void InitPLC()
+        {
+            switch(InitFormInfo.PLC)
+            {
+                case "Omron":
+                    InitOmronPLC();
+                    break;
+                case "Siemens":
+                    InitSiemensPLC();
+                    break;
+                
+            }
+                 
+        }
+
+        #region 初始化欧姆龙PLC
+        private void InitOmronPLC()
+        {
+            try
+            {
+                IsConnectPLC = false;
+                if (null != PLCOmron)
+                {
+                    PLCOmron.Dispose();
+                    PLCOmron = null;
+                }
+                PLCOmron = new PLC64Omron(Global.ListPLCInfo[Index].IP, 2, this.Container);
+
+                //PLC_Connect_Omron();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Fatal("欧姆龙PLC初始化失败！", ex);
+            }
+        }
+        #endregion
+
+        #region 初始化西门子plc
+        private void InitSiemensPLC()
+        {
+            try
+            {
+                IsConnectPLC = false;
+                if (null !=PLCSiemens)
+                {
+                    PLCSiemens.Disconnect();
+                    PLCSiemens = null;
+                }
+                PLCSiemens = new Class_Siemens(Global.ListPLCInfo[Index].IP, Global.ListPLCInfo[Index].Port, Global.ListPLCInfo[Index].NS);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Fatal("西门子PLC初始化失败！", ex);
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region 与欧姆龙PLC交互线程
+        private void PC_PLC_SignalExchange_Omron(CancellationToken token, bool v)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                #region 判断plc是否断线
+                if (!IsConnectPLC)
+                {
+                    UpdateShowMessage("正在连接PLC……");
+                    new Task(() => ConnectOmronPLC()).Start();
+                    Thread.Sleep(3000);
+                    continue;
+                }
+                #endregion
+                Thread.Sleep(1);
+
+                #region 发送握手信号
+                if (IsHandshake)
+                {
+                    if (IsStart)
+                    {
+                        IsOne = !IsOne;
+
+                        PLCPulse = IsOne ? 1 : 2;
+
+                        IsHandshake = false;
+                        bool back = false;
+                        back = PLCOmron.WriteTagValue(null , PLCPulse);
+                        if (!back)
+                        {
+                            IsConnectPLC = false;
+                            PLCPulse = 0;
+                        }
+
+                    }
+                    else
+                    {
+                        PLCPulse = 0;
+                    }
+                }
+                #endregion
+
+                #region 与PLC 交互
+                if (v)
+                {
+                    try
+                    {
+                        object isRead;
+                        PLCOmron.ReadTagValue(null, out isRead);
+                        ReadTRG = (1 == (int)isRead) ? 1 : 0;
+                        if (1 != ReadTRG)
+                        {
+                            OldReadTRG = 0;
+                        }
+                        else
+                        {
+                            if (0 < ReadTRG - OldReadTRG)
+                            {
+                                //读取数据
+                                ReadDataFromPLC_Omron();
+                            }
+                            OldReadTRG = 1;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        UpdateShowMessage("读取PLC 数据异常:" + ex.Message);
+                        LogHelper.Fatal("与plc交互异常！", ex);
+                    }
+                }
+                #endregion
+
+            }
+        }
+
+        private void ReadDataFromPLC_Omron()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region 连接西门子PLC
+        private void ConnectOmronPLC()
+        {
+            //如果未连接
+            if (IsConnectPLC == false && PLCOmron != null)
+            {
+                bool back = PLCOmron.Connect();
+                if (back)
+                {
+                    IsConnectPLC = true;
+                    UpdateShowMessage("PLC连接成功！");
+                }
+                else
+                {
+                    IsConnectPLC = false;
+                    Thread.Sleep(3000);
+                    ConnectOmronPLC();
+                }
+            }
+        }
+
+        #endregion
+
+        #region 西门子plc交互线程
+        private void PC_PLC_SignalExchange_Siemens(CancellationToken token, bool v)
+        {
+            DateTime x = DateTime.Now;
+            while (!token.IsCancellationRequested)
+            {
+                #region 判断plc是否断线
+                if (!IsConnectPLC)
+                {
+                    UpdateShowMessage("正在连接PLC……");
+                    Task task1 = Task.Run(() =>
+                    {
+                        ConnectPLCSiemens();
+                    });
+                    task1.Wait();
+
+                    Thread.Sleep(3000);
+                    continue;
+                }
+                #endregion
+
+
+                Thread.Sleep(1);
+
+                #region 发送握手信号
+                if (IsHandshake)
+                {
+                    if (IsStart)
+                    {
+                        IsOne = !IsOne;
+
+                        PLCPulse = IsOne ? 1 : 2;
+
+                        IsHandshake = false;
+                        bool back = false;
+                        try
+                        {
+                            back = PLCSiemens.PLC_WriteValues(PLCPulse.ToString(), null);
+                        }
+                        catch (Exception ex)
+                        {
+                            IsConnectPLC = false;
+                            UpdateShowMessage("握手信号异常，与PLC断开连接！");
+
+                        }
+                        if (!back)
+                        {
+                            IsConnectPLC = false;
+                            PLCPulse = 0;
+                        }
+
+                    }
+                    else
+                    {
+                        PLCPulse = 0;
+                    }
+                }
+                #endregion
+
+                #region 与PLC 交互
+                if (v)
+                {
+                    try
+                    {
+                        #region 读取plc数据
+                        var isRead = PLCSiemens.PLC_ReadValues("");
+                        ReadTRG = ("1" == isRead) ? 1 : 0;
+                        if (1 != ReadTRG)
+                        {
+                            OldReadTRG = 0;
+                        }
+                        else
+                        {
+                            if (0 < ReadTRG - OldReadTRG)
+                            {
+                                //读取数据
+                                ReadDataFromPLC();
+                            }
+                            OldReadTRG = 1;
+                        }
+
+                        #endregion
+
+
+                    }
+                    catch (Exception ex)
+                    {             
+                        UpdateShowMessage(string.Format("与plc交互异常：{0}！", ex.Message));
+                        LogHelper.Fatal(string.Format("与plc交互异常：{0}！", ex.Message));
+                    }
+                }
+                #endregion
+
+            }
+        }
+
+        private void ReadDataFromPLC()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region 连接西门子plc
+
+        private void ConnectPLCSiemens()
+        {
+            //如果未连接
+            if (IsConnectPLC == false && PLCSiemens != null)
+            {
+                try
+                {
+                    var back = PLCSiemens.Connect();
+                    if (0 == back)
+                    {
+                        IsConnectPLC = true;
+                        UpdateShowMessage("连接PLC 成功！");
+
+                    }
+                    else
+                    {
+                        IsConnectPLC = false;
+                        Thread.Sleep(3000);
+                        ConnectPLCSiemens();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    IsConnectPLC = false;
+                    UpdateShowMessage("连接PLC 异常；原因：" + ex.Message);
+                    LogHelper.Fatal(ex.Message);
+                }
+
+            }
+        }
+        #endregion
+
+        #region UI刷新
+        private void UIRefresh(object state)
+        {
+            SendOrPostCallback callback = o =>
+            {
+                //数据库指示灯
+                if (!IsConnectSQL)
+                {
+                    if (Color.FromArgb(252, 71, 71) != BarSQL.BackColor)
+                    {
+                        BarSQL.BackColor = Color.FromArgb(252, 71, 71);
+                    }
+                }
+                else
+                {
+                    if (Color.FromArgb(6, 176, 37) != BarSQL.BackColor)
+                    {
+                        BarSQL.BackColor = Color.FromArgb(6, 176, 37);
+                    }
+                }
+
+                //PLC指示灯
+                if (!IsConnectPLC)
+                {
+                    if (Color.FromArgb(252, 71, 71) != BarPLC.BackColor)
+                    {
+                        BarPLC.BackColor = Color.FromArgb(252, 71, 71);
+                    }
+                }
+                else
+                {
+                    if (Color.FromArgb(6, 176, 37) != BarPLC.BackColor)
+                    {
+                        BarPLC.BackColor = Color.FromArgb(6, 176, 37);
+                    }
+                }
+                //脉冲
+                lblPulse.Text = string.Format("握手信号:{0}", PLCPulse);
+            
+            };
+            if (null != RefreshTimer)
+            {
+                if (IsDisposed || !this.IsHandleCreated) return;
+                SyncContext.Post(callback, null);
+                RefreshTimer.Change(350, Timeout.Infinite);
+            }
+
+        }
+        #endregion
 
         #region 更新界面布局
         private void UpdateLayOut()
@@ -85,11 +618,11 @@ namespace CaterUI
         {
             BarPLC = new MyProgressBar();
             BarSQL = new MyProgressBar();
-            BarPulse = new MyProgressBar();
+  
 
             ChangeColor(BarPLC, progressBarPLC);
             ChangeColor(BarSQL, progressBarSQL);
-            ChangeColor(BarPulse, progressBarPulse);
+        
         }
         #endregion
 
@@ -414,6 +947,11 @@ namespace CaterUI
 
         #endregion
 
+        private void Timer_pulse_Tick(object sender, EventArgs e)
+        {
+            IsHandshake = true;
+        }
+
         private void 清屏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dgvMessage.Rows.Clear();
@@ -423,8 +961,25 @@ namespace CaterUI
         private void 测试ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateShowMessage("测试");
-            LogHelper.Error("测试");
-            LogHelper.Fatal("测试");
+
+        }
+
+        private void 开始运行ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(StartMenuText == this.开始运行ToolStripMenuItem.Text)
+            {
+                if (StartListen())
+                {
+                    this.开始运行ToolStripMenuItem.Text = StopMenuText;
+                }
+            }
+            else
+            {
+                if (StopListen())
+                {
+                    this.开始运行ToolStripMenuItem.Text = StartMenuText;
+                }
+            }
         }
 
         #region 主界面用户权限更改通知窗体改变菜单栏
@@ -444,5 +999,160 @@ namespace CaterUI
             }
         }
         #endregion
+
+        #region 开始监听PLC
+
+        public bool StartListen()
+        {
+            if (IsStart)
+            {
+                currentRunMode = RunMode.OnListen;
+                return true;
+            }
+
+            try
+            {
+                //开始监听plc
+                if (IsConnectPLC && IsConnectSQL)//plc和数据库同时连上
+                {
+                    //开启握手
+                    IsStart = true;
+                    //握手信号计时器
+                    Timer_pulse.Start();
+                    //2.开启线程
+                    if (Cts != null)
+                    {
+                        Cts.Cancel();      //取消FormLoad时PC_PLC_SignalExchange线程
+                    }
+                    Cts = new CancellationTokenSource();
+                    switch (InitFormInfo.PLC)
+                    {
+                        case "Omron":
+                            new Task(() => PC_PLC_SignalExchange_Omron(Cts.Token, true)).Start();
+                            break;
+                        case "Siemens":
+                            new Task(() => PC_PLC_SignalExchange_Siemens(Cts.Token, true)).Start();
+                            break;
+
+                    }
+                    //更新开始监听时菜单栏状态
+                    currentRunMode = RunMode.OnListen;
+
+                }
+                else
+                {
+                    //监听失败
+                    IsStart = false;
+                    currentRunMode = RunMode.OffListen;
+                    MessageBox.Show("PLC或数据库未连接，程序无法启动，请检查连接！");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateShowMessage(string.Format("程序运行异常，原因:{0}", ex.Message));
+                LogHelper.Fatal(string.Format("程序运行异常，原因:{0}", ex.Message));
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
+        #region 停止监听PLC
+
+        public bool StopListen()
+        {
+            if (!IsStart)
+            {
+                currentRunMode = RunMode.OffListen;
+                return true;
+            }
+
+            try
+            {
+                //停止监听plc
+                //关闭握手
+                IsStart = false;
+                //握手信号计时器
+                Timer_pulse.Stop();
+                //2.停止交互线程
+                if (Cts != null)
+                {
+                    Cts.Cancel();      //取消FormLoad时PC_PLC_SignalExchange线程
+                }
+                Cts = new CancellationTokenSource();
+                switch (InitFormInfo.PLC)
+                {
+                    case "Omron":
+                        new Task(() => PC_PLC_SignalExchange_Omron(Cts.Token, false)).Start();
+                        break;
+                    case "Siemens":
+                        new Task(() => PC_PLC_SignalExchange_Siemens(Cts.Token, false)).Start();
+                        break;
+
+                }
+                //更新停止监听时菜单栏状态
+                currentRunMode = RunMode.OffListen;
+            }
+            catch (Exception ex)
+            {
+                UpdateShowMessage(string.Format("停止程序异常，原因：{0}", ex.Message));
+                LogHelper.Fatal(string.Format("停止程序异常，原因：{0}",ex.Message));
+                currentRunMode = RunMode.OffListen;
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+
+        #region 退出程序
+        public void Exit()
+        {
+            Task task = Task.Run(() =>
+            {
+                //停止PLC交互
+                IsConnectPLC = false;
+                //关闭阻塞队列
+                BlockQueue.CompleteAdding();
+             
+                while (!BlockQueue.IsCompleted)
+                {
+                    //等待队列数据处理完
+                    Thread.Sleep(100);
+                }
+                BlockQueue.Close();
+  
+                //关闭处理线程
+                IsThreadRunning = false;
+             
+                if (null != DealDataThread && DealDataThread.IsAlive)
+                {
+                    DealDataThread.Abort();
+                    DealDataThread = null;
+                }
+       
+
+                if (Cts != null)
+                {
+                    Cts.Cancel();
+                    Cts.Dispose();
+                }
+
+                if (null != RefreshTimer)
+                {
+                    RefreshTimer.Dispose();
+                    RefreshTimer = null;
+                }
+
+            });
+
+        }
+
+        #endregion
+
+        
+
+
     }
 }

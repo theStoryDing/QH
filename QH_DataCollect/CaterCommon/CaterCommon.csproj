@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CaterCommon</RootNamespace>
     <AssemblyName>CaterCommon</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,11 +32,31 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CIPCompolet64">
+      <HintPath>C:\Users\Administrator\Desktop\FINSGateway\sample\Compolet\CIP\CIPCompolet\64bitSample\64bitSampleC#\Assembly\CIPCompolet64.dll</HintPath>
+    </Reference>
+    <Reference Include="CIPCompoletProxyLib">
+      <HintPath>C:\Users\Administrator\Desktop\FINSGateway\sample\Compolet\CIP\CIPCompolet\64bitSample\64bitSampleC#\Assembly\CIPCompoletProxyLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CIPCompoletProxyServer">
+      <HintPath>C:\Users\Administrator\Desktop\FINSGateway\sample\Compolet\CIP\CIPCompolet\64bitSample\64bitSampleC#\Assembly\CIPCompoletProxyServer.exe</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\QH_DataCollect\dll\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\QH_DataCollect\dll\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Opc.Ua.Client">
+      <HintPath>..\QH_DataCollect\dll\Opc.Ua.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Core">
+      <HintPath>..\QH_DataCollect\dll\Opc.Ua.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,10 +65,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockQueue.cs" />
+    <Compile Include="Class_Siemens.cs" />
     <Compile Include="DESHelper.cs" />
+    <Compile Include="EndpointWrapper.cs" />
+    <Compile Include="ExportExcel.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="Md5Helper.cs" />
+    <Compile Include="PLC64Omron.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UAClientHelperAPI.cs" />
     <Compile Include="XMLHelper.cs" />
   </ItemGroup>
   <ItemGroup>

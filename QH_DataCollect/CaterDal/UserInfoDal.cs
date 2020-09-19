@@ -24,7 +24,7 @@ namespace CaterDal
             UserInfo ui = null;
             string sql = "select * from T_User Where uid=@name";
             SqlParameter para = new SqlParameter("@name", name);
-            DataTable dt = SqlServerHelper.GetDataTable(sql, para);
+            DataTable dt = SqlServerHelper.GetDataTable( CommandType.Text,sql, para);
             if(0 < dt.Rows.Count)
             {
                 ui = new UserInfo()

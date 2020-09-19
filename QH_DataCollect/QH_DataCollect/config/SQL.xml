@@ -11,4 +11,5 @@
   <password>6D80B529F41D03B5</password>
   <!--是否启用数据库, 0 不启用， 1 启用-->
   <issave>1</issave>
+  <sb>QH2</sb>
 </SQL>

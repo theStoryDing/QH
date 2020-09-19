@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormShow));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.progressBarPulse = new System.Windows.Forms.ProgressBar();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lblPulse = new System.Windows.Forms.Label();
             this.progressBarSQL = new System.Windows.Forms.ProgressBar();
             this.label2 = new System.Windows.Forms.Label();
             this.progressBarPLC = new System.Windows.Forms.ProgressBar();
@@ -44,11 +44,12 @@
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnMsg = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.IP设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.开始运行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.测试读写ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清屏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Timer_pulse = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -59,8 +60,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
-            this.panel1.Controls.Add(this.progressBarPulse);
-            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.lblPulse);
             this.panel1.Controls.Add(this.progressBarSQL);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.progressBarPLC);
@@ -73,24 +73,15 @@
             this.panel1.Size = new System.Drawing.Size(778, 516);
             this.panel1.TabIndex = 0;
             // 
-            // progressBarPulse
+            // lblPulse
             // 
-            this.progressBarPulse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.progressBarPulse.Location = new System.Drawing.Point(307, 496);
-            this.progressBarPulse.Name = "progressBarPulse";
-            this.progressBarPulse.Size = new System.Drawing.Size(29, 15);
-            this.progressBarPulse.TabIndex = 10;
-            this.progressBarPulse.Value = 100;
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(226, 496);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 15);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "握手信号:";
+            this.lblPulse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPulse.AutoSize = true;
+            this.lblPulse.Location = new System.Drawing.Point(226, 496);
+            this.lblPulse.Name = "lblPulse";
+            this.lblPulse.Size = new System.Drawing.Size(75, 15);
+            this.lblPulse.TabIndex = 9;
+            this.lblPulse.Text = "握手信号:";
             // 
             // progressBarSQL
             // 
@@ -220,14 +211,6 @@
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // 测试ToolStripMenuItem
-            // 
-            this.测试ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
-            this.测试ToolStripMenuItem.Name = "测试ToolStripMenuItem";
-            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
-            this.测试ToolStripMenuItem.Text = "测试";
-            this.测试ToolStripMenuItem.Click += new System.EventHandler(this.测试ToolStripMenuItem_Click);
-            // 
             // IP设置ToolStripMenuItem
             // 
             this.IP设置ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
@@ -236,13 +219,14 @@
             this.IP设置ToolStripMenuItem.Size = new System.Drawing.Size(128, 24);
             this.IP设置ToolStripMenuItem.Text = "PLC通讯设置";
             // 
-            // 开始监听ToolStripMenuItem
+            // 开始运行ToolStripMenuItem
             // 
             this.开始运行ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
-            this.开始运行ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("开始监听ToolStripMenuItem.Image")));
-            this.开始运行ToolStripMenuItem.Name = "开始监听ToolStripMenuItem";
+            this.开始运行ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("开始运行ToolStripMenuItem.Image")));
+            this.开始运行ToolStripMenuItem.Name = "开始运行ToolStripMenuItem";
             this.开始运行ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
             this.开始运行ToolStripMenuItem.Text = "开始运行";
+            this.开始运行ToolStripMenuItem.Click += new System.EventHandler(this.开始运行ToolStripMenuItem_Click);
             // 
             // 测试读写ToolStripMenuItem
             // 
@@ -260,6 +244,19 @@
             this.清屏ToolStripMenuItem.Size = new System.Drawing.Size(71, 24);
             this.清屏ToolStripMenuItem.Text = "清屏";
             this.清屏ToolStripMenuItem.Click += new System.EventHandler(this.清屏ToolStripMenuItem_Click);
+            // 
+            // 测试ToolStripMenuItem
+            // 
+            this.测试ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.测试ToolStripMenuItem.Name = "测试ToolStripMenuItem";
+            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
+            this.测试ToolStripMenuItem.Text = "测试";
+            this.测试ToolStripMenuItem.Click += new System.EventHandler(this.测试ToolStripMenuItem_Click);
+            // 
+            // Timer_pulse
+            // 
+            this.Timer_pulse.Interval = 1000;
+            this.Timer_pulse.Tick += new System.EventHandler(this.Timer_pulse_Tick);
             // 
             // FormShow
             // 
@@ -299,13 +296,13 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView dgvMessage;
-        private System.Windows.Forms.ProgressBar progressBarPulse;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblPulse;
         private System.Windows.Forms.ProgressBar progressBarSQL;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ProgressBar progressBarPLC;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnMsg;
+        private System.Windows.Forms.Timer Timer_pulse;
     }
 }

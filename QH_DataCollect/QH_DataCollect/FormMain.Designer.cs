@@ -35,13 +35,10 @@
             this.登录ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.注销ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.PLC通讯设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据库通讯ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.日志设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.信息查看ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.日志信息ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.配置文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.操作手册ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于软件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,9 +66,10 @@
             this.Spinner = new DMSkin.Metro.Controls.MetroProgressSpinner();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btn_StopRunning = new DMSkin.Controls.DMButton();
-            this.btn_exit2 = new DMSkin.Controls.DMButton();
+            this.btn_exit = new DMSkin.Controls.DMButton();
             this.btn_Run = new DMSkin.Controls.DMButton();
             this.timerLogin = new System.Windows.Forms.Timer(this.components);
+            this.timer_deleteLogFile = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -109,7 +107,7 @@
             // 
             this.登录ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("登录ToolStripMenuItem.Image")));
             this.登录ToolStripMenuItem.Name = "登录ToolStripMenuItem";
-            this.登录ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.登录ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.登录ToolStripMenuItem.Text = "登录";
             this.登录ToolStripMenuItem.Click += new System.EventHandler(this.登录ToolStripMenuItem_Click);
             // 
@@ -117,28 +115,19 @@
             // 
             this.注销ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("注销ToolStripMenuItem.Image")));
             this.注销ToolStripMenuItem.Name = "注销ToolStripMenuItem";
-            this.注销ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.注销ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.注销ToolStripMenuItem.Text = "注销";
             this.注销ToolStripMenuItem.Click += new System.EventHandler(this.注销ToolStripMenuItem_Click);
             // 
             // 设置ToolStripMenuItem
             // 
             this.设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.PLC通讯设置ToolStripMenuItem,
-            this.数据库通讯ToolStripMenuItem,
-            this.日志设置ToolStripMenuItem});
+            this.数据库通讯ToolStripMenuItem});
             this.设置ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.设置ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("设置ToolStripMenuItem.Image")));
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
             this.设置ToolStripMenuItem.Size = new System.Drawing.Size(71, 24);
             this.设置ToolStripMenuItem.Text = "设置";
-            // 
-            // PLC通讯设置ToolStripMenuItem
-            // 
-            this.PLC通讯设置ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("PLC通讯设置ToolStripMenuItem.Image")));
-            this.PLC通讯设置ToolStripMenuItem.Name = "PLC通讯设置ToolStripMenuItem";
-            this.PLC通讯设置ToolStripMenuItem.Size = new System.Drawing.Size(159, 26);
-            this.PLC通讯设置ToolStripMenuItem.Text = "PLC通讯";
             // 
             // 数据库通讯ToolStripMenuItem
             // 
@@ -146,20 +135,13 @@
             this.数据库通讯ToolStripMenuItem.Name = "数据库通讯ToolStripMenuItem";
             this.数据库通讯ToolStripMenuItem.Size = new System.Drawing.Size(159, 26);
             this.数据库通讯ToolStripMenuItem.Text = "数据库通讯";
-            // 
-            // 日志设置ToolStripMenuItem
-            // 
-            this.日志设置ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("日志设置ToolStripMenuItem.Image")));
-            this.日志设置ToolStripMenuItem.Name = "日志设置ToolStripMenuItem";
-            this.日志设置ToolStripMenuItem.Size = new System.Drawing.Size(159, 26);
-            this.日志设置ToolStripMenuItem.Text = "日志设置";
+            this.数据库通讯ToolStripMenuItem.Click += new System.EventHandler(this.数据库通讯ToolStripMenuItem_Click);
             // 
             // 信息查看ToolStripMenuItem
             // 
             this.信息查看ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.数据查询ToolStripMenuItem,
-            this.日志信息ToolStripMenuItem,
-            this.配置文件ToolStripMenuItem});
+            this.日志信息ToolStripMenuItem});
             this.信息查看ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.信息查看ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("信息查看ToolStripMenuItem.Image")));
             this.信息查看ToolStripMenuItem.Name = "信息查看ToolStripMenuItem";
@@ -170,22 +152,17 @@
             // 
             this.数据查询ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("数据查询ToolStripMenuItem.Image")));
             this.数据查询ToolStripMenuItem.Name = "数据查询ToolStripMenuItem";
-            this.数据查询ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.数据查询ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.数据查询ToolStripMenuItem.Text = "数据查询";
+            this.数据查询ToolStripMenuItem.Click += new System.EventHandler(this.数据查询ToolStripMenuItem_Click);
             // 
             // 日志信息ToolStripMenuItem
             // 
             this.日志信息ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("日志信息ToolStripMenuItem.Image")));
             this.日志信息ToolStripMenuItem.Name = "日志信息ToolStripMenuItem";
-            this.日志信息ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.日志信息ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.日志信息ToolStripMenuItem.Text = "日志信息";
-            // 
-            // 配置文件ToolStripMenuItem
-            // 
-            this.配置文件ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("配置文件ToolStripMenuItem.Image")));
-            this.配置文件ToolStripMenuItem.Name = "配置文件ToolStripMenuItem";
-            this.配置文件ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
-            this.配置文件ToolStripMenuItem.Text = "配置文件";
+            this.日志信息ToolStripMenuItem.Click += new System.EventHandler(this.日志信息ToolStripMenuItem_Click);
             // 
             // 帮助ToolStripMenuItem
             // 
@@ -425,7 +402,7 @@
             this.tableLayoutPanel3.ColumnCount = 1;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Controls.Add(this.btn_StopRunning, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.btn_exit2, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.btn_exit, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.btn_Run, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 69);
@@ -462,30 +439,32 @@
             this.btn_StopRunning.Text = "停止";
             this.btn_StopRunning.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btn_StopRunning.UseVisualStyleBackColor = false;
+            this.btn_StopRunning.Click += new System.EventHandler(this.btn_StopRunning_Click);
             // 
-            // btn_exit2
+            // btn_exit
             // 
-            this.btn_exit2.BackColor = System.Drawing.Color.Transparent;
-            this.btn_exit2.BackgroundImage = global::QH_DataCollect.Properties.Resources._24;
-            this.btn_exit2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btn_exit2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_exit2.DM_DisabledColor = System.Drawing.Color.Empty;
-            this.btn_exit2.DM_DownColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(140)))), ((int)(((byte)(188)))));
-            this.btn_exit2.DM_MoveColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(195)))), ((int)(((byte)(245)))));
-            this.btn_exit2.DM_NormalColor = System.Drawing.Color.Transparent;
-            this.btn_exit2.DM_Radius = 1;
-            this.btn_exit2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_exit2.Font = new System.Drawing.Font("宋体", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btn_exit2.ForeColor = System.Drawing.Color.Black;
-            this.btn_exit2.Image = null;
-            this.btn_exit2.Location = new System.Drawing.Point(4, 588);
-            this.btn_exit2.Margin = new System.Windows.Forms.Padding(4);
-            this.btn_exit2.Name = "btn_exit2";
-            this.btn_exit2.Size = new System.Drawing.Size(65, 286);
-            this.btn_exit2.TabIndex = 13;
-            this.btn_exit2.Text = "退出";
-            this.btn_exit2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btn_exit2.UseVisualStyleBackColor = false;
+            this.btn_exit.BackColor = System.Drawing.Color.Transparent;
+            this.btn_exit.BackgroundImage = global::QH_DataCollect.Properties.Resources._24;
+            this.btn_exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_exit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_exit.DM_DisabledColor = System.Drawing.Color.Empty;
+            this.btn_exit.DM_DownColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(140)))), ((int)(((byte)(188)))));
+            this.btn_exit.DM_MoveColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(195)))), ((int)(((byte)(245)))));
+            this.btn_exit.DM_NormalColor = System.Drawing.Color.Transparent;
+            this.btn_exit.DM_Radius = 1;
+            this.btn_exit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_exit.Font = new System.Drawing.Font("宋体", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_exit.ForeColor = System.Drawing.Color.Black;
+            this.btn_exit.Image = null;
+            this.btn_exit.Location = new System.Drawing.Point(4, 588);
+            this.btn_exit.Margin = new System.Windows.Forms.Padding(4);
+            this.btn_exit.Name = "btn_exit";
+            this.btn_exit.Size = new System.Drawing.Size(65, 286);
+            this.btn_exit.TabIndex = 13;
+            this.btn_exit.Text = "退出";
+            this.btn_exit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btn_exit.UseVisualStyleBackColor = false;
+            this.btn_exit.Click += new System.EventHandler(this.btn_exit_Click);
             // 
             // btn_Run
             // 
@@ -514,11 +493,18 @@
             this.btn_Run.UseCompatibleTextRendering = true;
             this.btn_Run.UseMnemonic = false;
             this.btn_Run.UseVisualStyleBackColor = false;
+            this.btn_Run.Click += new System.EventHandler(this.btn_Run_Click);
             // 
             // timerLogin
             // 
             this.timerLogin.Interval = 60000;
             this.timerLogin.Tick += new System.EventHandler(this.timerLogin_Tick);
+            // 
+            // timer_deleteLogFile
+            // 
+            this.timer_deleteLogFile.Enabled = true;
+            this.timer_deleteLogFile.Interval = 60000;
+            this.timer_deleteLogFile.Tick += new System.EventHandler(this.timer_deleteLogFile_Tick);
             // 
             // FormMain
             // 
@@ -534,6 +520,8 @@
             this.Name = "FormMain";
             this.Text = "QH数据采集程序";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -554,13 +542,10 @@
         private System.Windows.Forms.ToolStripMenuItem 登录ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 注销ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem PLC通讯设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 数据库通讯ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 日志设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 信息查看ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 数据查询ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 日志信息ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 配置文件ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 帮助ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 操作手册ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 关于软件ToolStripMenuItem;
@@ -587,10 +572,11 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private DMSkin.Metro.Controls.MetroProgressSpinner Spinner;
         private DMSkin.Controls.DMButton btn_StopRunning;
-        private DMSkin.Controls.DMButton btn_exit2;
+        private DMSkin.Controls.DMButton btn_exit;
         private DMSkin.Controls.DMButton btn_Run;
         private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.Timer timerLogin;
+        private System.Windows.Forms.Timer timer_deleteLogFile;
     }
 }
 

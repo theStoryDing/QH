@@ -118,7 +118,7 @@ namespace CaterUI
                     Device = XMLHelper.ReadNode(path, string.Format("plc{0}//device", i+1)),
                     IP = XMLHelper.ReadNode(path, string.Format("plc{0}//ip", i + 1)),
                     Port = Convert.ToInt32(XMLHelper.ReadNode(path, string.Format("plc{0}//port", i + 1))),
-                    NS = XMLHelper.ReadNode(path, string.Format("plc{0}//ns", i + 1))
+                    NS = Convert.ToInt32(XMLHelper.ReadNode(path, string.Format("plc{0}//ns", i + 1)))
                 });
             }
             

@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CaterModel
+namespace CaterCommon
 {
     /// <summary>
     /// DES可逆加密 
