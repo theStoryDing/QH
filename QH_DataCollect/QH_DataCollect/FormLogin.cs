@@ -29,6 +29,7 @@ namespace CaterUI
         {
             this.MaximizeBox = false;
             this.cb_user.SelectedIndex = 0;
+            this.txt_password.Text = null;
             this.txt_password.Select();
         }
 

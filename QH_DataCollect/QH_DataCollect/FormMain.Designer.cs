@@ -41,7 +41,6 @@
             this.日志信息ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.操作手册ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.关于软件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tssl_currentUser = new System.Windows.Forms.ToolStripStatusLabel();
@@ -152,7 +151,7 @@
             // 
             this.数据查询ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("数据查询ToolStripMenuItem.Image")));
             this.数据查询ToolStripMenuItem.Name = "数据查询ToolStripMenuItem";
-            this.数据查询ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.数据查询ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.数据查询ToolStripMenuItem.Text = "数据查询";
             this.数据查询ToolStripMenuItem.Click += new System.EventHandler(this.数据查询ToolStripMenuItem_Click);
             // 
@@ -160,15 +159,14 @@
             // 
             this.日志信息ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("日志信息ToolStripMenuItem.Image")));
             this.日志信息ToolStripMenuItem.Name = "日志信息ToolStripMenuItem";
-            this.日志信息ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.日志信息ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.日志信息ToolStripMenuItem.Text = "日志信息";
             this.日志信息ToolStripMenuItem.Click += new System.EventHandler(this.日志信息ToolStripMenuItem_Click);
             // 
             // 帮助ToolStripMenuItem
             // 
             this.帮助ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.操作手册ToolStripMenuItem,
-            this.关于软件ToolStripMenuItem});
+            this.操作手册ToolStripMenuItem});
             this.帮助ToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.帮助ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("帮助ToolStripMenuItem.Image")));
             this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
@@ -179,15 +177,9 @@
             // 
             this.操作手册ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("操作手册ToolStripMenuItem.Image")));
             this.操作手册ToolStripMenuItem.Name = "操作手册ToolStripMenuItem";
-            this.操作手册ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.操作手册ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.操作手册ToolStripMenuItem.Text = "操作手册";
-            // 
-            // 关于软件ToolStripMenuItem
-            // 
-            this.关于软件ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("关于软件ToolStripMenuItem.Image")));
-            this.关于软件ToolStripMenuItem.Name = "关于软件ToolStripMenuItem";
-            this.关于软件ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
-            this.关于软件ToolStripMenuItem.Text = "关于软件";
+            this.操作手册ToolStripMenuItem.Click += new System.EventHandler(this.操作手册ToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -548,7 +540,6 @@
         private System.Windows.Forms.ToolStripMenuItem 日志信息ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 帮助ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 操作手册ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 关于软件ToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel tssl_currentUser;

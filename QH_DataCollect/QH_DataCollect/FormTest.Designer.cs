@@ -83,7 +83,7 @@
             this.btn_write.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btn_write.Location = new System.Drawing.Point(374, 150);
             this.btn_write.Name = "btn_write";
-            this.btn_write.Size = new System.Drawing.Size(88, 23);
+            this.btn_write.Size = new System.Drawing.Size(88, 26);
             this.btn_write.TabIndex = 15;
             this.btn_write.Text = "写入";
             this.btn_write.UseVisualStyleBackColor = true;
@@ -104,7 +104,7 @@
             this.btn_read.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btn_read.Location = new System.Drawing.Point(374, 55);
             this.btn_read.Name = "btn_read";
-            this.btn_read.Size = new System.Drawing.Size(88, 23);
+            this.btn_read.Size = new System.Drawing.Size(88, 26);
             this.btn_read.TabIndex = 13;
             this.btn_read.Text = "读取";
             this.btn_read.UseVisualStyleBackColor = true;

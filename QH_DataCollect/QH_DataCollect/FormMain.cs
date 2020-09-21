@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -609,6 +610,14 @@ namespace CaterUI
             {
                 QueryDataForm.Activate();
             }
+        }
+
+        private void 操作手册ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DirectoryInfo str = new DirectoryInfo(string.Format(@"{0}..\..\..\help\操作手册.docx", Application.StartupPath));
+            string path = str.FullName;
+
+            System.Diagnostics.Process.Start("explorer.exe", path);
         }
     }
 }

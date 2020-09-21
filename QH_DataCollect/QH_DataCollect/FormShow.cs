@@ -276,7 +276,7 @@ namespace CaterUI
                     PLCOmron = null;
                 }
                 //注意：连接多个PLC时，要根据连接不同的端口
-                PLCOmron = new PLC64Omron(Global.ListPLCInfo[Index].IP, 2, this.Container);
+                PLCOmron = new PLC64Omron(Global.ListPLCInfo[Index].IP, Global.ListPLCInfo[Index].Port, this.Container);
 
                 //PLC_Connect_Omron();
             }
